@@ -3,7 +3,7 @@ The power of GPT-3.5 in your projects for free!
 
 ## API Note
 APIs go up and down every once in a while, so if get blank responses, please open an issue for me to update it.
-The API used in LOLEMO is dead, so I've updated to it to use https://api.tmrace.net/v1/chat/completions. I would add a block to set the API URL however, I do not know how to program JS that well.
+The API used in LOLEMO's version is dead, so I've updated it to use https://api.tmrace.net/v1/chat/completions. I would add a block to set the API URL however, I do not know how to program JS that well.
 
 ## Installation
 To use this extension in Turbowarp, open Add Extension > Custom Extension and paste this link
