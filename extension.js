@@ -174,7 +174,7 @@
     }
 
     singlePrompt(args) {
-      const api_url = "https://free.churchless.tech/v1/chat/completions";
+      const api_url = "https://api.tmrace.net/v1/chat/completions";
       const prompt = args.PROMPT;
 
       return Scratch.fetch(api_url, {
@@ -290,7 +290,7 @@
     }
 
     advancedPrompt(args) {
-      const api_url = "https://free.churchless.tech/v1/chat/completions";
+      const api_url = "https://api.tmrace.net/v1/chat/completions";
       const prompt = args.PROMPT;
       const chatID = args.chatID;
       if (!(chatID in this.chatHistories)) {
