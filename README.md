@@ -8,7 +8,7 @@ The API used in LOLEMO is dead, so I've updated to it to use https://api.tmrace.
 ## Installation
 To use this extension in Turbowarp, open Add Extension > Custom Extension and paste this link
 
-    [https://lolemo.github.io/turboGPT/extension.js](https://raw.githubusercontent.com/Anonymous-cat1/WorkingTurboGPT/main/extension.js)
+    https://raw.githubusercontent.com/Anonymous-cat1/WorkingTurboGPT/main/extension.js
     
 ## How to use
 To simply send a prompt to ChatGPT without any context (chat history), use this reporter:
