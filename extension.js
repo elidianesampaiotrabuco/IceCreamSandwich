@@ -330,7 +330,7 @@
 	  const chatID = args.chatID;
 
 	  if (!(chatID in this.chatHistories)) {
-		return "";
+		return "Error: That Chatbot does not exist.";
 	  }
 
 	  const chatHistory = this.chatHistories[chatID] || [];
