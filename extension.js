@@ -410,5 +410,5 @@
     }
 
   }
-  Scratch.extensions.register(new TurboGPT());
+  Scratch.extensions.register(new WorkingTurboGPT());
 })(Scratch);
