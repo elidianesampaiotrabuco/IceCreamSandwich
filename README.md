@@ -1,5 +1,5 @@
-# TurboGPT
-The power of GPT-3.5 in your projects for free!
+# WorkingTurboGPT
+The power of GPT-3.5 in your projects for free! Included: single prompts, definable chatbots, and chat history manipulation. Extension originally made by LOLEMO then forked by Anonymous_cat1.
 
 ## API Note
 APIs go up and down every once in a while, so if you get blank responses, you should be able to find more reverse proxies here on the internet.
