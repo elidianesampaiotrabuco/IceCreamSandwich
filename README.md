@@ -6,7 +6,7 @@ APIs go up and down every once in a while, so if you get error responses, you sh
 The API used in LOLEMO's version is dead, so I've updated it to use https://api.tmrace.net/v1/chat/completions by default, although you can update it using the "Set Reverse Proxy API URL" block.
 
 ## Installation
-To use this extension in Turbowarp (or Turbowarp Mods), open Add Extension > Custom Extension and paste this link
+To use this extension in Turbowarp (or Turbowarp mods), open Add Extension > Custom Extension and paste this link
 
     https://anonymous-cat1.github.io/WorkingTurboGPT/extension.js
     
