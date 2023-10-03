@@ -12,8 +12,8 @@
 
     getInfo() {
       return {
-        id: "turboGPT",
-        name: "TurboGPT",
+        id: "workingturboGPT",
+        name: "WorkingTurboGPT",
         menuIconURI: extIcon,
         blockIconURI: gptIcon,
         blocks: [
