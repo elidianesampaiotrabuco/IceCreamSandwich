@@ -2,7 +2,7 @@
 The power of GPT-3.5 in your projects for free! Included: single prompts, definable chatbots, and chat history manipulation. Extension originally made by LOLEMO then forked by Anonymous_cat1.
 
 ## API Note
-APIs go up and down every once in a while, so if you get blank responses, you should be able to find more reverse proxies here on the internet.
+APIs go up and down every once in a while, so if you get error responses, you should be able to find more reverse proxies here on the internet.
 The API used in LOLEMO's version is dead, so I've updated it to use https://api.tmrace.net/v1/chat/completions by default, although you can update it using the "Set Reverse Proxy API URL" block.
 
 ## Installation
