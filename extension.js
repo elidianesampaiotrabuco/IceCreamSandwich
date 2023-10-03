@@ -5,7 +5,7 @@
 	// Initialize the api_url variable with a default value
 	let api_url = 'https://api.tmrace.net/v1/chat/completions';
 
-  class TurboGPT {
+  class WorkingTurboGPT {
     constructor() {
       this.chatHistories = {};
     }
