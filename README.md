@@ -1,5 +1,7 @@
 # WorkingTurboGPT
-<img src="https://anonymous-cat1.github.io/WorkingTurboGPT/img/thumb.svg" width="100%" height="70"/>
+
+<img src="https://anonymous-cat1.github.io/WorkingTurboGPT/img/thumb.svg" width="200%" height="200"/>
+
 The power of GPT-3.5 in your projects for free! Included: single prompts, definable chatbots, and chat history manipulation. Extension originally made by LOLEMO then forked by Anonymous_cat1.
 
 ## API Note
