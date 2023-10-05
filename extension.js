@@ -32,7 +32,7 @@
           {
             opcode: 'singlePrompt',
             blockType: Scratch.BlockType.REPORTER,
-            text: 'Generate from prompt [PROMPT]',
+            text: 'Generate from prompt (No Context) [PROMPT]',
             arguments: {
               PROMPT: {
                 type: Scratch.ArgumentType.STRING,
