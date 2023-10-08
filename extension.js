@@ -6,6 +6,7 @@ class LooksExtension {
     return {
       id: 'looksexample',
       name: 'Looks Expansion',
+      color1: "#9966ff",
       blocks: [
         {
           opcode: 'shout',
