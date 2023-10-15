@@ -96,12 +96,11 @@
                 {
                   opcode: 'numberblockoriginal',
                   blockType: Scratch.BlockType.REPORTER,
-                  text: 'does number [NUMORI] exist in numberblocks?',
+                  text: 'does number [INPUT] exist in numberblocks?',
                   disableMonitor: true,
                   arguments: {
-                    NUMORI: {
+                    INPUT: {
                       type: Scratch.ArgumentType.STRING,
-                      menu: 'NUMORI_MENU'
                     }
                   }
                 },
