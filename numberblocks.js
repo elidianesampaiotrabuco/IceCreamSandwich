@@ -100,7 +100,8 @@
                   disableMonitor: true,
                   arguments: {
                     INPUT: {
-                      type: Scratch.ArgumentType.STRING,
+                      type: Scratch.ArgumentType.NUMBER,
+                      defaultValue: '1'
                     }
                   }
                 },
@@ -136,7 +137,7 @@
       }
       numberblockoriginal(args) {
         if (!NumberblocksMenu.includes(args.INPUT)) {
-          // `args.BREED` is not any of the cat breeds in the `catBreeds` array
+          // `args.INPUT` is not any of the input in the `NumberblocksMenu` array
           return "false"
         } else {
           return "true"
