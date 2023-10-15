@@ -100,7 +100,7 @@
                   disableMonitor: true,
                   arguments: {
                     INPUT: {
-                      type: Scratch.ArgumentType.NUMBER,
+                      type: Scratch.ArgumentType.STRING,
                       defaultValue: '1'
                     }
                   }
