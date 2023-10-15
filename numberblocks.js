@@ -135,7 +135,7 @@
         return "no, mostly toxic."
       }
       numberblockoriginal(args) {
-        if (!NumberblocksMenu.includes(args.NUMORI)) {
+        if (!NumberblocksMenu.includes(args.INPUT)) {
           // `args.BREED` is not any of the cat breeds in the `catBreeds` array
           return "false"
         } else {
