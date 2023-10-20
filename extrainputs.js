@@ -14,7 +14,7 @@
                   },
                   {
                     opcode: 'NumberInput',
-                    text: 'number Input [TYPEIN]',
+                    text: 'number input [TYPEIN]',
                     blockType: Scratch.BlockType.REPORTER,
                     arguments: {
                       TYPEIN: {
@@ -29,7 +29,7 @@
                   },
                   {
                     opcode: 'EmptyInput',
-                    text: 'empty Input [NOTTYPEIN]',
+                    text: 'empty input [NOTTYPEIN]',
                     blockType: Scratch.BlockType.REPORTER,
                     arguments: {
                       NOTTYPEIN: {
