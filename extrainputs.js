@@ -4,7 +4,7 @@
       getInfo() {
           return {
               id: "ExtraInputs",
-              name: "More Inputs",
+              name: "Extra Inputs",
               color1: "#585abf",
               color2: "#444594",
               blocks: [
