@@ -5,6 +5,7 @@
           return {
               id: "ExtraInputs",
               name: "Extra Inputs",
+              docsURI: 'https://en.scratch-wiki.info/wiki/Argument#Argument_Types',
               color1: "#585abf",
               color2: "#444594",
               blocks: [
