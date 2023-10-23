@@ -251,7 +251,7 @@
         });
       } else if ((args.MATHMENU) === 'times') {
         return new Promise((resolve, reject) => {
-          const timeInMilliseconds = (args.input1 * 1000) * (args.input2 * 1000);
+          const timeInMilliseconds = (args.input1 * 1000) * args.input2;
           setTimeout(() => {
             resolve();
           }, timeInMilliseconds);
