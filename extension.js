@@ -37,14 +37,17 @@ class LooksExtension {
       ]
     };
   }
-
-  shout (args) {
-    return new Promise((resolve, reject) => {
-      const timeInMilliseconds = args.SHOUT * 1000;
-      setTimeout(() => {
-        resolve();
-      }, timeInMilliseconds);
-    });
+  static get SAY_OR_THINK () {
+    // There are currently many places in the codebase which explicitly refer to this event by the string 'SAY',
+    // so keep this as the string 'SAY' for now rather than changing it to 'SAY_OR_THINK' and breaking things.
+    return 'SAY';
+  }
+  shout (args, util) {
+    const message = args.SHOUT;
+    this._say(message, util.target);
+  }
+  _say (message, target) { // used by compiler
+    this.runtime.emit(LooksExtension.SAY_OR_THINK, target, 'say', message);
   }
 }
 Scratch.extensions.register(new LooksExtension());
