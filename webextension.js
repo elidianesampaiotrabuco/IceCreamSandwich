@@ -4,7 +4,7 @@
 */
 
 (function(Scratch) {
-    const variables = {};
+    'use strict';
 
     class Extension {
         getInfo() {
