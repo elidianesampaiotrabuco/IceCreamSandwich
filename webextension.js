@@ -10,8 +10,6 @@
         throw new Error('This extension must be ran unsandboxed');
     }
 
-    const vm = Scratch.vm;
-
     class Extension {
         getInfo() {
             return {
