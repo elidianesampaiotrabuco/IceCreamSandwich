@@ -6,10 +6,6 @@
 (function(Scratch) {
     const variables = {};
 
-    if (!Scratch.extensions.unsandboxed) {
-        throw new Error('This extension must be ran unsandboxed');
-    }
-
     class Extension {
         getInfo() {
             return {
