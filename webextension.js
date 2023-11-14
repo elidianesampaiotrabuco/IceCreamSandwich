@@ -4,7 +4,12 @@
 */
 
 (function(Scratch) {
-    'use strict';
+    const variables = {};
+
+    let FULLSCREENMENU = [
+      'enable',
+      'disable'
+    ]
 
     class Extension {
         getInfo() {
@@ -53,15 +58,14 @@
                   },
                   {
                     opcode: 'WebExt_Fullscreen',
-                    text: 'enable fullscreen mode',
+                    text: '[FULLSCREEN_MENU] fullscreen mode',
                     blockType: Scratch.BlockType.COMMAND,
-                    arguments: {}
-                  },
-                  {
-                    opcode: 'WebExt_noFullscreen',
-                    text: 'disable fullscreen mode',
-                    blockType: Scratch.BlockType.COMMAND,
-                    arguments: {}
+                    arguments: {
+                      FULLSCREEN_MENU: {
+                        type: Scratch.ArgumentType.STRING,
+                        menu: 'FULLSCREEN_MENU'
+                      }
+                    }
                   },
                   {
                     opcode: 'WebExt_isFullscreen',
@@ -309,6 +313,12 @@
                     arguments: {}
                   },
                 ],
+                menus: {
+                  FULLSCREEN_MENU: {
+                    acceptReporters: true,
+                    items: FULLSCREENMENU
+                  }
+                }
             };
         }
         WebExt_CurrentUrl(args, util) {
@@ -321,10 +331,11 @@
             Scratch.redirect(args.URL);
         }
         WebExt_Fullscreen(args, util) {
+          if ((args.FULLSCREEN_MENU) === 'enable') {
             document.documentElement.requestFullscreen();
-        }
-        WebExt_noFullscreen(args, util) {
+          } else if ((args.FULLSCREEN_MENU) === 'disable') {
             document.exitFullscreen();
+          }
         }
         WebExt_isFullscreen(args, util) {
             if (document.fullscreenElement) {
