@@ -1,12 +1,18 @@
 (function(Scratch) {
     const variables = {};
-    let api_url = 'https://api.github.com/';
+    let api_url = 'https://api.github.com/repos';
     let LISTMENU = [
+      'ID',
+      'Node ID',
       'Created at',
+      'Most Used Language',
+      'Archived'
     ];
     let COUNTMENU = [
       'Watchers',
       'Stargazers',
+      'Size',
+      'Open Issues'
     ];
     class Extension {
         getInfo() {
@@ -18,13 +24,39 @@
                   opcode: 'GithubAPI_Fetch',
                   text: 'fetch [LIST] info from org. [ORG] repo. [REPO]',
                   blockType: Scratch.BlockType.REPORTER,
-                  arguments: {}
+                  arguments: {
+                    LIST: {
+                      type: Scratch.ArgumentType.STRING,
+                      menu: 'LIST'
+                    },
+                    ORG: {
+                      type: Scratch.ArgumentType.STRING,
+                      defaultValue: 'DinosaurMod'
+                    },
+                    REPO: {
+                      type: Scratch.ArgumentType.STRING,
+                      defaultValue: 'dinosaurmod.github.io'
+                    },
+                  }
                 },
                 {
                   opcode: 'GithubAPI_FetchCount',
                   text: 'fetch [COUNT] count from org. [ORG] repo. [REPO]',
                   blockType: Scratch.BlockType.REPORTER,
-                  arguments: {}
+                  arguments: {
+                    COUNT: {
+                      type: Scratch.ArgumentType.STRING,
+                      menu: 'COUNT'
+                    },
+                    ORG: {
+                      type: Scratch.ArgumentType.STRING,
+                      defaultValue: 'DinosaurMod'
+                    },
+                    REPO: {
+                      type: Scratch.ArgumentType.STRING,
+                      defaultValue: 'dinosaurmod.github.io'
+                    },
+                  }
                 },
                 {
                   opcode: 'c',
@@ -38,20 +70,30 @@
                   blockType: Scratch.BlockType.HAT,
                   arguments: {}
                 },
-              ]
+              ],
+              menus: {
+                LIST: {
+                  acceptReporters: true,
+                  items: LISTMENU
+                },
+                COUNT: {
+                  acceptReporters: true,
+                  items: COUNTMENU
+                },
+              }
             }
         }
-        a() {
-          
+        GithubAPI_Fetch() {
+          return 'work in progress'
         }
-        b() {
-          
+        GithubAPI_FetchCount() {
+          return 'work in progress'
         }
         c() {
-          
+          return 'work in progress'
         }
         d() {
-          
+          return true
         }
     }
 
