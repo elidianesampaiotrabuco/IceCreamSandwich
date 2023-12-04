@@ -107,6 +107,26 @@
                   }
                 },
                 {
+                  opcode: 'dm_oddmathistrue',
+                  text: 'is [NUM1] ^ [NUM2] = [ANSWER]',
+                  blockType: Scratch.BlockType.BOOLEAN,
+                  disableMonitor: true,
+                  arguments: {
+                    NUM1: {
+                      type: Scratch.ArgumentType.NUMBER,
+                      defaultValue: '2'
+                    },
+                    NUM2: {
+                      type: Scratch.ArgumentType.NUMBER,
+                      defaultValue: '3'
+                    },
+                    ANSWER: {
+                      type: Scratch.ArgumentType.NUMBER,
+                      defaultValue: '8'
+                    },
+                  }
+                },
+                {
                   opcode: 'dm_squared',
                   text: '[input1] squared',
                   blockType: Scratch.BlockType.REPORTER,
@@ -146,12 +166,31 @@
                     },
                   }
                 },
+                {
+                  blockType: "label",
+                  text: "More Hat Blocks",
+                },
+                {
+                  opcode: 'dm_truefalse',
+                  text: '[input1]',
+                  blockType: Scratch.BlockType.HAT,
+                  arguments: {
+                    input1: {
+                      type: Scratch.ArgumentType.STRING,
+                      menu: 'truefalsemenu'
+                    },
+                  }
+                },
               ],
               menus: {
                 oddnummenu: {
                   acceptReporters: false,
                   items: oddnummenu
                 },
+                truefalsemenu: {
+                  acceptReporters: true,
+                  items: ['true', 'false']
+                }
               }
           };
       }
@@ -187,6 +226,14 @@
           return false
         }
       }
+      dm_oddmathistrue(args, util) {
+        const trueanswer = args.NUM1 ** args.NUM2
+        if (args.ANSWER === trueanswer) {
+          return true
+        } else {
+          return false
+        }
+      }
       dm_oddnumbers(args, util) {
         if ((args.oddnummenu) === 'φ') {
           return '1.61803398874989484820458683436563811772030917980576286213544862270526046281890 2449707207204189391'
@@ -210,6 +257,9 @@
             resolve();
           }, time);
         });
+      }
+      dm_truefalse(args, util) {
+        return args.input1
       }
   }
 

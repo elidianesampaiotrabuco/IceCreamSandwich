@@ -1,12 +1,12 @@
 (function(Scratch) {
     const variables = {};
-    let api_url = 'https://api.github.com/repos';
+    let api_url = 'https://api.github.com/repos/';
     let LISTMENU = [
-      'ID',
+      'Repo ID',
       'Node ID',
+      'Description',
       'Created at',
-      'Most Used Language',
-      'Archived'
+      'Most Used Language'
     ];
     let COUNTMENU = [
       'Watchers',
@@ -15,6 +15,9 @@
       'Open Issues'
     ];
     class Extension {
+      constructor() {
+        
+      }
         getInfo() {
             return {
               id: "GithubAPI",
@@ -22,7 +25,7 @@
               blocks: [
                 {
                   opcode: 'GithubAPI_Fetch',
-                  text: 'fetch [LIST] info from org. [ORG] repo. [REPO]',
+                  text: 'fetch [LIST] from org. [ORG] repo. [REPO]',
                   blockType: Scratch.BlockType.REPORTER,
                   arguments: {
                     LIST: {
@@ -83,6 +86,7 @@
               }
             }
         }
+        
         GithubAPI_Fetch() {
           return 'work in progress'
         }
