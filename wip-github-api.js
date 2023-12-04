@@ -62,10 +62,19 @@
                   }
                 },
                 {
-                  opcode: 'c',
-                  text: 'boolean',
+                  opcode: 'GitHubAPI_doesItexist',
+                  text: 'does org. [ORG], repo. [REPO] exist?',
                   blockType: Scratch.BlockType.BOOLEAN,
-                  arguments: {}
+                  arguments: {
+                    ORG: {
+                      type: Scratch.ArgumentType.STRING,
+                      defaultValue: 'DinosaurMod'
+                    },
+                    REPO: {
+                      type: Scratch.ArgumentType.STRING,
+                      defaultValue: 'dinosaurmod.github.io'
+                    },
+                  }
                 },
                 {
                   opcode: 'd',
@@ -87,14 +96,23 @@
             }
         }
         
-        GithubAPI_Fetch() {
+        GithubAPI_Fetch(args) {
+          const api_link = (api_url + args.ORG + '/' + args.REPO)
           return 'work in progress'
         }
-        GithubAPI_FetchCount() {
+        GithubAPI_FetchCount(args) {
+          const api_link = (api_url + args.ORG + '/' + args.REPO)
           return 'work in progress'
         }
-        c() {
-          return 'work in progress'
+        GitHubAPI_doesItexist(args) {
+          let api_link = (api_url + args.ORG + '/' + args.REPO)
+          const fetched = Scratch.fetch(api_link).then((r) => r.text()).catch(() => "")
+          const notexist = Scratch.fetch((api_link + '/')).then((r) => r.text()).catch(() => "")
+          if (!(fetched) === (notexist)) {
+            return true
+          } else {
+            return false
+          }
         }
         d() {
           return true
