@@ -107,7 +107,7 @@
         GitHubAPI_doesItexist(args) {
           let api_link = (api_url + args.ORG + '/' + args.REPO)
           const fetched = Scratch.fetch(api_link).then((r) => r.text()).catch(() => "")
-          const notexist = Scratch.fetch((api_link + '/')).then((r) => r.text()).catch(() => "")
+          const notexist = Scratch.fetch('https://api.github.com/r/').then((r) => r.text()).catch(() => "")
           if (!(fetched) === (notexist)) {
             return true
           } else {
