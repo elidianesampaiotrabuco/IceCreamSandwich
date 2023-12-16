@@ -1,6 +1,8 @@
 (function(Scratch) {
-    const variables = {};
-    let api_url = 'https://api.github.com/repos/';
+    const variables = {}; 
+
+    let api_url = 'https://api.github.com/';
+    
     let LISTMENU = [
       'Repo ID',
       'Node ID',
@@ -14,10 +16,21 @@
       'Size',
       'Open Issues'
     ];
+    var getJSON = function(url, callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'json';
+      xhr.onload = function() {
+        var status = xhr.status;
+        if (status === 200) {
+          callback(null, xhr.response);
+        } else {
+          callback(status, xhr.response);
+        }
+      };
+      xhr.send();
+    }; 
     class Extension {
-      constructor() {
-        
-      }
         getInfo() {
             return {
               id: "GithubAPI",
@@ -34,7 +47,7 @@
                     },
                     ORG: {
                       type: Scratch.ArgumentType.STRING,
-                      defaultValue: 'DinosaurMod'
+                      defaultValue: 'Dinosaurmod'
                     },
                     REPO: {
                       type: Scratch.ArgumentType.STRING,
@@ -51,21 +64,6 @@
                       type: Scratch.ArgumentType.STRING,
                       menu: 'COUNT'
                     },
-                    ORG: {
-                      type: Scratch.ArgumentType.STRING,
-                      defaultValue: 'DinosaurMod'
-                    },
-                    REPO: {
-                      type: Scratch.ArgumentType.STRING,
-                      defaultValue: 'dinosaurmod.github.io'
-                    },
-                  }
-                },
-                {
-                  opcode: 'GitHubAPI_doesItexist',
-                  text: 'does org. [ORG], repo. [REPO] exist?',
-                  blockType: Scratch.BlockType.BOOLEAN,
-                  arguments: {
                     ORG: {
                       type: Scratch.ArgumentType.STRING,
                       defaultValue: 'DinosaurMod'
@@ -95,24 +93,29 @@
               }
             }
         }
-        
-        GithubAPI_Fetch(args) {
-          const api_link = (api_url + args.ORG + '/' + args.REPO)
-          return 'work in progress'
+        GithubAPI_Fetch(args, util) {
+          let fullapi_url = api_url + 'repos/' + args.ORG + '/' + args.REPO
+          getJSON(fullapi_url,
+          function(err, data) {
+            if (err !== null) {
+              return ('Something went wrong: ' + err);
+            } else {
+              if (args.LIST === 'Repo ID') {
+                return data.id
+              } else if (args.LIST === 'Node ID') {
+                return data.node_id
+              } else if (args.LIST === 'Description') {
+                return data.description
+              } else if (args.LIST === 'Created at') {
+                return data.created_at
+              } else if (args.LIST === 'Most Used Language') {
+                return data.language
+              }
+            }
+          });
         }
         GithubAPI_FetchCount(args) {
-          const api_link = (api_url + args.ORG + '/' + args.REPO)
-          return 'work in progress'
-        }
-        GitHubAPI_doesItexist(args) {
-          let api_link = (api_url + args.ORG + '/' + args.REPO)
-          const fetched = Scratch.fetch(api_link).then((r) => r.text()).catch(() => "")
-          const notexist = Scratch.fetch('https://api.github.com/r/').then((r) => r.text()).catch(() => "")
-          if (!(fetched) === (notexist)) {
-            return true
-          } else {
-            return false
-          }
+          
         }
         d() {
           return true

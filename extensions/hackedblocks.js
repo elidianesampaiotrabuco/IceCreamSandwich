@@ -29,11 +29,13 @@ class HacksExtension {
         "---",
         {
           blockType: Scratch.BlockType.XML,
+          filter: [Scratch.TargetType.SPRITE],
           xml: '<block type="event_whentouchingobject"><value name="TOUCHINGOBJECTMENU"><shadow type="event_touchingobjectmenu"/></value></block>',
         },
         "---",
         {
           blockType: Scratch.BlockType.XML,
+          filter: [Scratch.TargetType.SPRITE],
           xml: '<block type="sensing_touchingobject"><value name="TOUCHINGOBJECTMENU"><shadow type="event_touchingobjectmenu"/></value></block>'
         },
         "---",
