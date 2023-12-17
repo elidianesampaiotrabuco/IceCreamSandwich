@@ -2,9 +2,9 @@
    This extension was made with TurboBuilder!
    https://turbobuilder.vercel.app/
 */
+
 (function(Scratch) {
   const variables = {};
-
   let oddnummenu = [
     'φ',
     'e',
@@ -181,6 +181,33 @@
               },
             }
           },
+          {
+            opcode: 'dm_equalsorandnotequal',
+            text: '[boolean1] [symbols] [boolean2] and [boolean3] [symbols2] [boolean4]',
+            blockType: Scratch.BlockType.BOOLEAN,
+            arguments: {
+              boolean1: {
+                type: Scratch.ArgumentType.BOOLEAN,
+              },
+              boolean2: {
+                type: Scratch.ArgumentType.BOOLEAN,
+              },
+              boolean3: {
+                type: Scratch.ArgumentType.BOOLEAN,
+              },
+              boolean4: {
+                type: Scratch.ArgumentType.BOOLEAN,
+              },
+              symbols: {
+                type: Scratch.ArgumentType.STRING,
+                menu: 'symbolmenu'
+              },
+              symbols2: {
+                type: Scratch.ArgumentType.STRING,
+                menu: 'symbolmenu'
+              },
+            }
+          },
         ],
         menus: {
           oddnummenu: {
@@ -190,6 +217,10 @@
           truefalsemenu: {
             acceptReporters: true,
             items: ['true', 'false']
+          },
+          symbolmenu: {
+            acceptReporters: false,
+            items: ['=', '≠']
           }
         }
       };
@@ -260,6 +291,27 @@
     }
     dm_truefalse(args, util) {
       return args.input1
+    }
+    dm_equalsorandnotequal(args, util) {
+      if (args.symbols === '=') {
+        const result1 = (args.boolean1 === args.boolean2)
+        if (args.symbols2 === '=') {
+          const result2 = (args.boolean3 === args.boolean4)
+          return (result1 === result2)
+        } else if (args.symbols2 === '≠') {
+          const result2 = (!args.boolean3 === args.boolean4)
+          return (result1 === result2)
+        }
+      } else if (args.symbols === '≠') {
+        const result1 = (!args.boolean1 === args.boolean2)
+        if (args.symbols2 === '=') {
+          const result2 = (args.boolean3 === args.boolean4)
+          return (result1 === result2)
+        } else if (args.symbols2 === '≠') {
+          const result2 = (!args.boolean3 === args.boolean4)
+          return (result1 === result2)
+        }
+      }
     }
   }
 
