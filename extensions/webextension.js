@@ -5,6 +5,7 @@
 
 (function(Scratch) {
     const variables = {};
+    let vm = Scratch.vm
 
     let FULLSCREENMENU = [
       'enable',
@@ -151,6 +152,23 @@
                             defaultValue: 'my cool project!'
                         }
                     }
+                  },
+                  {
+                    blockType: "label",
+                    text: "Test Blocks",
+                  },
+                  {
+                    opcode: 'WebExt_Date',
+                    text: 'date since 1970',
+                    blockType: Scratch.BlockType.REPORTER,
+                    arguments: {}
+                  },
+                  {
+                    opcode: 'WebExt_Reset',
+                    text: 'refresh workspace',
+                    blockType: Scratch.BlockType.REPORTER,
+                    disableMonitor: true,
+                    arguments: {}
                   },
                   {
                     blockType: "label",
@@ -430,6 +448,12 @@
         }
         WebExt_ChangeWebTitle(args, util) {
             document.title = args.TITLE;
+        }
+        WebExt_Date(args, util) {
+            return Date.now()
+        }
+        WebExt_Reset(args, util) {
+          return vm.refreshWorkspace();
         }
         WebExt_windowX() {
             return window.screenLeft;

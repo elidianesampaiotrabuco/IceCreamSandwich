@@ -1,7 +1,5 @@
 (function(Scratch) {
-    const variables = {}; 
-
-    let api_url = 'https://api.github.com/';
+    const variables = {};
     
     let LISTMENU = [
       'Repo ID',
@@ -16,20 +14,6 @@
       'Size',
       'Open Issues'
     ];
-    var getJSON = function(url, callback) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', url, true);
-      xhr.responseType = 'json';
-      xhr.onload = function() {
-        var status = xhr.status;
-        if (status === 200) {
-          callback(null, xhr.response);
-        } else {
-          callback(status, xhr.response);
-        }
-      };
-      xhr.send();
-    }; 
     class Extension {
         getInfo() {
             return {
@@ -94,25 +78,39 @@
             }
         }
         GithubAPI_Fetch(args, util) {
-          let fullapi_url = api_url + 'repos/' + args.ORG + '/' + args.REPO
-          getJSON(fullapi_url,
-          function(err, data) {
-            if (err !== null) {
-              return ('Something went wrong: ' + err);
-            } else {
-              if (args.LIST === 'Repo ID') {
-                return data.id
-              } else if (args.LIST === 'Node ID') {
-                return data.node_id
-              } else if (args.LIST === 'Description') {
-                return data.description
-              } else if (args.LIST === 'Created at') {
-                return data.created_at
-              } else if (args.LIST === 'Most Used Language') {
-                return data.language
-              }
-            }
-          });
+          let api_url = 'https://api.github.com/' + 'repos/' + args.ORG + '/' + args.REPO
+          if (args.LIST === 'Repo ID') {
+            const result = Scratch.fetch(api_url)
+            .then( res => res.json())
+            .then(data => (data.id))
+            .catch(() => "");
+            return result
+          } else if (args.LIST === 'Node ID') {
+            const result = Scratch.fetch(api_url)
+            .then( res => res.json())
+            .then(data => (data.node_id))
+            .catch(() => "");
+            return result
+          } else if (args.LIST === 'Description') {
+            const result = Scratch.fetch(api_url)
+            .then( res => res.json())
+            .then(data => (data.description))
+            .catch(() => "");
+            return result
+          } else if (args.LIST === 'Created at') {
+            const result = Scratch.fetch(api_url)
+            .then( res => res.json())
+            .then(data => (data.created_at))
+            .catch(() => "");
+            return result
+          } else if (args.LIST === 'Most Used Language') {
+            const result = Scratch.fetch(api_url)
+            .then( res => res.json())
+            .then(data => (data.language))
+            .catch(() => "");
+            return result
+          }
+          
         }
         GithubAPI_FetchCount(args) {
           
