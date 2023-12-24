@@ -41,11 +41,11 @@ class LooksExtension {
       name: 'Looks Expansion',
       color1: "#9966ff",
       blocks: [
-        {
+        /*{
           func: 'notify',
           blockType: Scratch.BlockType.BUTTON,
           text: 'note to this extension'
-        },
+        },*/
         {
           opcode: 'shout',
           text: 'shout [SHOUT]',
