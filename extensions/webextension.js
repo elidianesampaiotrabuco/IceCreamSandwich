@@ -11,7 +11,7 @@
       'enable',
       'disable'
     ]
-  
+
     /** @type {WakeLockSentinel} */
     let wakeLock = null;
     let latestEnabled = false;
@@ -777,5 +777,5 @@
             window.close();
         }
     }
-    Scratch.extensions.register(new Extension());
+    Scratch.extensions.register(new Extension(Scratch.vm.runtime));
 })(Scratch);
