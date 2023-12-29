@@ -12,6 +12,8 @@
       'disable'
     ]
 
+    const isSafariNavigator = !navigator.userAgent.includes('Chrome') && navigator.userAgent.includes('Safari');
+
     /** @type {WakeLockSentinel} */
     let wakeLock = null;
     let latestEnabled = false;
@@ -348,6 +350,35 @@
                   },
                   {
                     blockType: "label",
+                    text: "Share URL",
+                  },
+                  {
+                    opcode: 'WebExt_ShareURL',
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: 'share URL [URL] with [TITLE] and message: [MESSAGE]',
+                    arguments: {
+                      TITLE: {
+                        type: Scratch.ArgumentType.STRING,
+                        defaultValue: 'Title'
+                      },
+                      MESSAGE: {
+                        type: Scratch.ArgumentType.STRING,
+                        defaultValue: ';essage'
+                      },
+                      URL: {
+                        type: Scratch.ArgumentType.NUMBER,
+                        menu: 'URL'
+                      }
+                    }
+                  },
+                  {
+                    opcode: 'WebExt_canShareURL',
+                    text: 'can share URL?',
+                    blockType: Scratch.BlockType.BOOLEAN,
+                    arguments: {}
+                  },
+                  {
+                    blockType: "label",
                     text: "Notifications",
                   },
                   {
@@ -497,11 +528,17 @@
           alert(
             `Note for some Blocks:
             
-            The wake lock block takes a moment to finish running as it activates wake lock, so if you put it in a script with other blocks, it will yield briefly, so try keeping it separate from your other scripts. The "is wake lock active?" boolean reporter, however, does not have a delay.
+            The wake lock block takes a moment to finish 
+            running as it activates wake lock, so if you put 
+            it in a script with other blocks, it will yield 
+            briefly, so try keeping it separate from your 
+            other scripts. The "is wake lock active?" 
+            boolean reporter, however, does not have a delay.
 
             These Specific Blocks don't work in the browsers:
             The Set Favicon Block does not work in Safari.
             Firefox does not have the "Sharing URL" feature.
+            The "Sharing URL" Block breaks Safari Navigator.
             Firefox does not support the "Wake Lock" feature.`
           )
         }
@@ -722,6 +759,35 @@
         }
         WebExt_isWakeLock(_, util) {
           return !!wakeLock;
+        }
+        WebExt_canShareURL () {
+          // eslint-disable-next-line no-negated-condition
+          if (!navigator.canShare) {
+              return false;
+          // eslint-disable-next-line no-else-return
+          // As the share URL method makes the Safari navigator bug, we return false here
+          // althougth if navigator.canShare() is supported
+          } else if (isSafariNavigator) {
+              return false;
+          // eslint-disable-next-line no-else-return
+          } else {
+              return true;
+          }
+        }
+  
+        WebExt_shareURL (args) {
+          // As this block makes the Safari navigator bug, we disable this
+          // method when the navigator is Safari by returning false
+          if (isSafariNavigator) {
+              return;
+          // eslint-disable-next-line no-else-return
+          } else {
+              navigator.share({
+                  url: args.URL,
+                  title: args.TITLE,
+                  text: args.MESSAGE
+              });
+          }
         }
         WebExt_canDisplayNotification () {
           if ('Notification' in window && Notification.requestPermission) {
