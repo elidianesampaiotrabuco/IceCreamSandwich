@@ -16,6 +16,7 @@
     const fakeEvent = {preventDefault: function(){}};
     document.oncontextmenu = enable;
     let isDisabled = false;
+    
     class Extension {
         getInfo() {
             return {
@@ -519,10 +520,9 @@
             );
         }
         WebExt_RightClick(args, util) {
-            const option = Scratch.Cast.toString(args.RIGHTCLICK_MENU)
-            if (option === 'enable') {
+            if (args.RIGHTCLICK_MENU === 'enable') {
               document.oncontextmenu = enable;
-            } else if (option === 'disable') {
+            } else if (args.RIGHTCLICK_MENU === 'disable') {
               document.oncontextmenu = disable;
             }
         }
