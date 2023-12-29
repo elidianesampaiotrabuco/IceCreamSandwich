@@ -109,7 +109,7 @@
                   },
                   {
                     blockType: "label",
-                    text: "Check Field in URL",
+                    text: "Field in URL",
                   },
                   {
                     opcode: 'WebExt_QueryStringField',
@@ -134,6 +134,21 @@
                         URL: {
                             type: Scratch.ArgumentType.STRING,
                             defaultValue: 'https://example.com'
+                        }
+                    }
+                  },
+                  {
+                    opcode: 'WebExt_setQueryStringFieldValue',
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: 'set field [FIELD] value from value [VALUE]',
+                    arguments: {
+                        FIELD: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'search'
+                        },
+                        VALUE: {
+                            type: Scratch.ArgumentType.STRING,
+                            defaultValue: 'value'
                         }
                     }
                   },
@@ -204,6 +219,17 @@
                     text: 'refresh workspace',
                     blockType: Scratch.BlockType.COMMAND,
                     arguments: {}
+                  },
+                  {
+                    opcode: 'WebExt_URLFavicon',
+                    text: '[URL] \/ favicon\.ico',
+                    blockType: Scratch.BlockType.REPORTER,
+                    arguments: {
+                      URL: {
+                        type: Scratch.ArgumentType.STRING,
+                        defaultValue: 'URL'
+                      },
+                    }
                   },
                   {
                     blockType: "label",
@@ -353,22 +379,22 @@
                     text: "Share URL",
                   },
                   {
-                    opcode: 'WebExt_ShareURL',
+                    opcode: 'WebExt_shareURL',
                     blockType: Scratch.BlockType.COMMAND,
-                    text: 'share URL [URL] with [TITLE] and message: [MESSAGE]',
+                    text: 'share URL [URL] with [TITLE] and message [MESSAGE]',
                     arguments: {
+                      URL: {
+                        type: Scratch.ArgumentType.STRING,
+                        default: 'URL'
+                      },
                       TITLE: {
                         type: Scratch.ArgumentType.STRING,
                         defaultValue: 'Title'
                       },
                       MESSAGE: {
                         type: Scratch.ArgumentType.STRING,
-                        defaultValue: ';essage'
+                        defaultValue: 'Message'
                       },
-                      URL: {
-                        type: Scratch.ArgumentType.NUMBER,
-                        menu: 'URL'
-                      }
                     }
                   },
                   {
@@ -628,6 +654,18 @@
             let parameters = (new URL(linkURL)).searchParams
             return parameters.has(field)
         }
+        WebExt_setQueryStringFieldValue(args) {
+          const url = new URL(window.location.href);
+          const parameters = new URLSearchParams(url.search);
+          parameters.set(args.FIELD, args.VALUE);
+          url.search = parameters.toString();
+          const newCurrentUrl = url.search;
+          history.pushState(
+            history.state,
+            document.title,
+            newCurrentUrl
+          );
+        }
         WebExt_getWidth() {
             return window.screen.width;
         }
@@ -654,6 +692,9 @@
         }
         WebExt_Reset(args, util) {
             return vm.refreshWorkspace();
+        }
+        WebExt_URLFavicon(args, util) {
+          return this._appendFaviconPath(args.URL)
         }
         WebExt_GetMemory(_, util) {
             // @ts-expect-error
@@ -841,6 +882,18 @@
         }
         WebExt_closetab(args, util) {
             window.close();
+        }
+        _appendFaviconPath(inputString) {
+          // Check if the input string ends with "/"
+          if (inputString.slice(-1) === '/') {
+            // If it does, remove the last character
+            inputString = inputString.slice(0, -1);
+          }
+
+          // Append "/favicon.ico" to the string
+          const resultString = inputString + "/favicon.ico";
+
+          return resultString;
         }
     }
     Scratch.extensions.register(new Extension(Scratch.vm.runtime));
