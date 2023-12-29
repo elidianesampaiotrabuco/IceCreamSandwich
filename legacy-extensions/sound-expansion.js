@@ -242,6 +242,18 @@ class SoundExtension {
         },
         "---",
         {
+          opcode: "SoundExp_toggleSounds",
+          blockType: Scratch.BlockType.COMMAND,
+          text: "[smenu] sounds",
+          arguments: {
+            smenu: {
+              type: Scratch.ArgumentType.STRING,
+              menu: "smenu"
+            }
+          },
+        },
+        "---",
+        {
           opcode: "SoundExp_startLooping",
           blockType: Scratch.BlockType.COMMAND,
           text: "start looping [SOUND]",
@@ -321,7 +333,20 @@ class SoundExtension {
               value: "pan",
             },
           ]
-        }
+        },
+        smenu: {
+          acceptReporters: true,
+          items: [
+            {
+              text: "pause",
+              value: "pause",
+            },
+            {
+              text: "resume",
+              value: "resume",
+            },
+          ]
+        },
       },
     };
   }
@@ -392,6 +417,13 @@ class SoundExtension {
   SoundExp_PlayUntilDoneURL({ path }, util) {
     return playSound(path, util.target);
   }
+  SoundExp_toggleSounds(args, util) {
+    if (args.smenu == 'pause') {
+    this._toggleSoundState(args, util, true, util.target.sprite);
+    } else if (args.smenu == 'resume') {
+    this._toggleSoundState(args, util, false, util.target.sprite);
+    }
+  }
   SoundExp_startLooping(args, util) {
     const index = this._getSoundIndex(args.SOUND, util);
     if (index < 0) return 0;
@@ -451,8 +483,8 @@ class SoundExtension {
     return Math.round(volume * 10000) / 100;
   }
 
-  _toggleSoundState(args, util, state) {
-    const sprite = util.target.sprite;
+  _toggleSoundState(args, util, state, target) {
+    const sprite = target;
     const audioContext = sprite.soundBank.audioEngine.audioContext;
 
     if (state) {
