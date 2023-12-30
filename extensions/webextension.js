@@ -55,6 +55,12 @@
                     arguments: {}
                   },
                   {
+                    opcode: 'WebExt_CurrentIP',
+                    text: 'current ip',
+                    blockType: Scratch.BlockType.REPORTER,
+                    arguments: {}
+                  },
+                  {
                     opcode: 'WebExt_System',
                     text: 'operating system',
                     blockType: Scratch.BlockType.REPORTER,
@@ -624,6 +630,11 @@
           }
           return 'Unknown';
         }
+        WebExt_CurrentIP(_, util) {
+          return Scratch.fetch("https://api.ipify.org/")
+          .then((r) => r.text())
+          .catch(() => "");
+          }
         WebExt_OpenWeb(args, util) {
             window.open(args.URL, '_blank');
         }
