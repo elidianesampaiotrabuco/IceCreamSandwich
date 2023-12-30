@@ -55,14 +55,15 @@
                     arguments: {}
                   },
                   {
-                    opcode: 'WebExt_CurrentIP',
-                    text: 'current ip',
+                    opcode: 'WebExt_System',
+                    text: 'operating system',
                     blockType: Scratch.BlockType.REPORTER,
                     arguments: {}
                   },
+                  "---",
                   {
-                    opcode: 'WebExt_System',
-                    text: 'operating system',
+                    opcode: 'WebExt_CurrentIP',
+                    text: 'current ip',
                     blockType: Scratch.BlockType.REPORTER,
                     arguments: {}
                   },
