@@ -1,5 +1,10 @@
 (function(Scratch) {
   const variables = {};
+
+  if (!Scratch.extensions.unsandboxed) {
+    throw new Error("TurboBuilder Extension must run unsandboxed");
+  }
+
   localStorage.setItem("SAVE-EXT-" + "LatestInputID", 'Blank');
   localStorage.setItem("SAVE-EXT-" + "LatestInputArgument", 'Blank');
   localStorage.setItem("SAVE-EXT-" + "LatestInputText", 'Blank');
@@ -11,8 +16,9 @@
               color1: "#ff6680",
               blocks: [
                   {
-                    blockType: "label",
-                    text: 'this extension is work in progress!'
+                    func: 'JScodeClipboard',
+                    blockType: Scratch.BlockType.BUTTON,
+                    text: 'copy extension code to clipboard'
                   },
                   {
                     opcode: 'Setup',
@@ -151,6 +157,11 @@
       JScode(args, util){
         return localStorage.getItem("SAVE-EXT-" + "JS") + `Scratch.extensions.register(new Extension());
 })(Scratch);`
+      }
+      JScodeClipboard() {
+        let JScode = localStorage.getItem("SAVE-EXT-" + "JS") + `Scratch.extensions.register(new Extension());
+      })(Scratch);`
+        navigator.clipboard.writeText(JScode);
       }
       createblock(args, util) {
         const BlockID = args.ID;
