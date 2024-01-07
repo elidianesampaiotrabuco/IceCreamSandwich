@@ -2,12 +2,9 @@
   const variables = {};
 
   if (!Scratch.extensions.unsandboxed) {
-    throw new Error("TurboBuilder Extension must run unsandboxed");
+    throw new Error("TurboBuilder must run unsandboxed");
   }
 
-  localStorage.setItem("SAVE-EXT-" + "LatestInputID", 'Blank');
-  localStorage.setItem("SAVE-EXT-" + "LatestInputArgument", 'Blank');
-  localStorage.setItem("SAVE-EXT-" + "LatestInputText", 'Blank');
   class Extension {
       getInfo() {
           return {
@@ -21,7 +18,8 @@
                     text: 'copy extension code to clipboard'
                   },
                   {
-                    opcode: 'Setup',
+                    opcode: 'TurboBuilder_Setup',
+                    func: 'Setup',
                     blockType: Scratch.BlockType.COMMAND,
                     text: 'set up extension [ID] [NAME] [COLOR1]',
                     arguments: {
@@ -40,13 +38,14 @@
                     }
                   },
                   {
-                    opcode: 'JScode',
+                    opcode: 'TurboBuilder_JScode',
+                    func: 'JScode',
                     text: 'extension code',
                     blockType: Scratch.BlockType.REPORTER,
-                    blockShape: Scratch.BlockShape.SQUARE
                   },
                   {
-                    opcode: 'createblock',
+                    opcode: 'TurboBuilder_createblock',
+                    func: 'createblock',
                     text: 'create block / id [ID] text [TEXT] blockType: [BLOCKTYPE_MENU]',
                     blockType: Scratch.BlockType.COMMAND,
                     arguments: {
@@ -65,7 +64,8 @@
                     },
                   },
                   {
-                    opcode: 'addFunctionality',
+                    opcode: 'TurboBuilder_addFunctionality',
+                    func: 'addFunctionality',
                     text: 'add function [FUNCTIONALITY] / BlockID [BLOCKID]',
                     blockType: Scratch.BlockType.COMMAND,
                     hideFromPalette: true,
@@ -81,7 +81,8 @@
                     },
                   },
                   {
-                    opcode: 'addInput',
+                    opcode: 'TurboBuilder_addInput',
+                    func: 'addInput',
                     text: 'add Input / Parent: [BlockID], ID: [ID] DefaultValue: [TEXT] / ArgumentType: [ARGUMENU]',
                     blockType: Scratch.BlockType.COMMAND,
                     hideFromPalette: true,
@@ -128,7 +129,13 @@
               }
           };
       }
+      _Clear() {
+        localStorage.setItem("SAVE-EXT-" + "LatestInputID", 'Blank');
+        localStorage.setItem("SAVE-EXT-" + "LatestInputArgument", 'Blank');
+        localStorage.setItem("SAVE-EXT-" + "LatestInputText", 'Blank');
+      }
       Setup(args, util) {
+        this._Clear()
         const ID = args.ID;
         const ExtName = args.NAME;
         const color1 = args.COLOR1;
@@ -182,56 +189,82 @@
       localStorage.setItem("SAVE-EXT-" + "JS", LocalStorage_JS + Script);
       }
       addFunctionality(args, util){
-        const LocalStorage_JS = localStorage.getItem("SAVE-EXT-" + "JS");
-        const BlockID = args.BLOCKID;
-        const Function = args.FUNCTIONALITY;
-        const { constant1, constant2 } = this._splitString(LocalStorage_JS, `Extension.prototype['${BlockID}'] = (args, util) => {
+        let LocalStorage_JS = localStorage.getItem("SAVE-EXT-" + "JS");
+        let BlockID = args.BLOCKID;
+        let Function = args.FUNCTIONALITY;
+        let { constant1, constant2 } = this._splitString(LocalStorage_JS, `Extension.prototype['${BlockID}'] = (args, util) => {
           `, `};`)
         let AfterMath = (constant1 + Function + constant2)
         localStorage.setItem("SAVE-EXT-" + "JS", AfterMath);
       }
       addInput(args, util) {
-        const InputID = args.ID;
-        const InputTEXT = args.TEXT;
-        const InputArgument = args.ARGUMENU;
-        const BlockID = args.BlockID;
-        const LocalStorage_JS = localStorage.getItem("SAVE-EXT-" + "JS");
-        const LatestInputID = localStorage.getItem("SAVE-EXT-" + "LatestInputID");
-        const LatestInputArgument = localStorage.getItem("SAVE-EXT-" + "LatestInputArgument");
-        const LatestInputText = localStorage.getItem("SAVE-EXT-" + "LatestInputText");
+        let InputID = args.ID;
+        let InputTEXT = args.TEXT;
+        let InputArgument = args.ARGUMENU;
+        let BlockID = args.BlockID;
+        let LocalStorage_JS = localStorage.getItem("SAVE-EXT-" + "JS");
+        let LatestInputID = localStorage.getItem("SAVE-EXT-" + "LatestInputID");
+        let LatestInputArgument = localStorage.getItem("SAVE-EXT-" + "LatestInputArgument");
+        let LatestInputText = localStorage.getItem("SAVE-EXT-" + "LatestInputText");
+        let Split1 = '';
         if (LatestInputID === 'Blank', LatestInputArgument === 'Blank', LatestInputText === 'Blank') {
-          const Split1 = `'${BlockID}',
+          Split1 = `'${BlockID}',
           arguments: {`;
-          localStorage.setItem("SAVE-EXT-" + "SPLIT", Split1);
-        } else {
-          const Split1 = `"${LatestInputID}": {
-            type: Scratch.ArgumentType.${LatestInputArgument},
-            defaultValue: '${LatestInputText}',
-          },
-        `;
-        localStorage.setItem("SAVE-EXT-" + "SPLIT", Split1);
-        };
-        const SPLITSTRING = localStorage.getItem("SAVE-EXT-" + "SPLIT");
-        localStorage.setItem("SAVE-EXT-" + "LatestInputID", InputID);
+          // localStorage.setItem("SAVE-EXT-" + "SPLIT", Split1);
+          localStorage.setItem("SAVE-EXT-" + "LatestInputID", InputID);
         localStorage.setItem("SAVE-EXT-" + "LatestInputArgument", InputArgument);
         localStorage.setItem("SAVE-EXT-" + "LatestInputText", InputTEXT);
-        const Script = `"${InputID}": {
+        let Script = `"${InputID}": {
           type: Scratch.ArgumentType.${InputArgument},
           defaultValue: '${InputTEXT}',
         },
       `;
-        const { constant1, constant2 } = this._splitString(LocalStorage_JS, SPLITSTRING, `}
+        let { constant1, constant2 } = this._splitString(LocalStorage_JS, Split1, `}
     });`);
         let JS = (constant1 + Script + constant2);
         localStorage.setItem("SAVE-EXT-" + "JS", JS);
+        } else {
+          Split1 = `"${LatestInputID}": {
+            type: Scratch.ArgumentType.${LatestInputArgument},
+            defaultValue: '${LatestInputText}',
+          },
+        `;
+        
+        localStorage.setItem("SAVE-EXT-" + "LatestInputID", InputID);
+        localStorage.setItem("SAVE-EXT-" + "LatestInputArgument", InputArgument);
+        localStorage.setItem("SAVE-EXT-" + "LatestInputText", InputTEXT);
+        let Script = `"${InputID}": {
+          type: Scratch.ArgumentType.${InputArgument},
+          defaultValue: '${InputTEXT}',
+        },
+      `;
+        let { constant1, constant2 } = this._splitString(LocalStorage_JS, Split1, `}
+    });`);
+        let JS = (constant1 + Script + constant2);
+        localStorage.setItem("SAVE-EXT-" + "JS", JS);
+        };
+        /*
+        localStorage.setItem("SAVE-EXT-" + "LatestInputID", InputID);
+        localStorage.setItem("SAVE-EXT-" + "LatestInputArgument", InputArgument);
+        localStorage.setItem("SAVE-EXT-" + "LatestInputText", InputTEXT);
+        let Script = `"${InputID}": {
+          type: Scratch.ArgumentType.${InputArgument},
+          defaultValue: '${InputTEXT}',
+        },
+      `;
+        let { constant1, constant2 } = this._splitString(LocalStorage_JS, Split1, `}
+    });`);
+        let JS = (constant1 + Script + constant2);
+        localStorage.setItem("SAVE-EXT-" + "JS", JS);
+        */
       }
       _splitString(majorString, substring1, substring2) {
           const index1 = majorString.indexOf(substring1);
           const index2 = majorString.indexOf(substring2);
         
           if (index1 !== -1 && index2 !== -1) {
-            const constant1 = majorString.slice(0, index1 + substring1.length);
-            const constant2 = majorString.slice(index2 + substring2.length);
+            let constant1 = majorString.slice(0, index1 + substring1.length);
+            let constant2 = majorString.slice(index2 + substring2.length);
         
             return { constant1, constant2 };
           } else {
