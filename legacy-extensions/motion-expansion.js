@@ -1,4 +1,5 @@
-Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set my home":"setz mein zuhause","_set my home to x: [X] y: [Y]":"setz mein zuhause zur x: [X] y: [Y]","_go to home":"geh zuhause"},"it":{"_Motion Expansion":"Espansione del moto","_set my home":"impostare la mia casa","_set my home to x: [X] y: [Y]":"imposta la mia casa su x: [X] y: [Y]","_go to home":"tornare a casa","_manually fence":"impedisci sprite fuori Stage","_move [PERCENT]% of the way to x: [X] y: [Y]":"percorri [PERCENT]% della distanza da x: [X] y: [Y]","_move [STEPS] steps towards x: [X] y: [Y]":"fai [STEPS] passi verso x: [X] y: [Y]","_rotation style":"stile rotazione","_touching rectangle x1: [X1] y1: [Y1] x2: [X2] y2: [Y2]?":"sta toccando rettangolo x1: [X1] y1: [Y1] x2: [X2] y2: [Y2]","_touching x: [X] y: [Y]?":"sta toccando x: [X] y: [Y]"}});
+Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set my home":"setz mein zuhause","_set my home to x: [X] y: [Y]":"setz mein zuhause zur x: [X] y: [Y]","_go to home":"geh zuhause","_move [STEPS] steps towards x: [X] y: [Y]":"gehe [STEPS] er Schritt richtung zur x: [X] y: [Y]","_move [PERCENT]% of the way to x: [X] y: [Y]":"gehe [PERCENT]% auf der weg zur x: [X] y: [Y]","_manually fence":"Verhindern Sie, dass Figuren die Bühne verlassen","_rotation style":"Drehtyp"},"it":{"_Motion Expansion":"Espansione del moto","_set my home":"impostare la mia casa","_set my home to x: [X] y: [Y]":"imposta la mia casa su x: [X] y: [Y]","_go to home":"tornare a casa","_manually fence":"impedisci sprite fuori Stage","_move [PERCENT]% of the way to x: [X] y: [Y]":"percorri [PERCENT]% della distanza da x: [X] y: [Y]","_move [STEPS] steps towards x: [X] y: [Y]":"fai [STEPS] passi verso x: [X] y: [Y]","_rotation style":"stile rotazione","_touching rectangle x1: [X1] y1: [Y1] x2: [X2] y2: [Y2]?":"sta toccando rettangolo x1: [X1] y1: [Y1] x2: [X2] y2: [Y2]","_touching x: [X] y: [Y]?":"sta toccando x: [X] y: [Y]"}});
+
 (function(Scratch) {
   'use strict';
 
@@ -176,6 +177,32 @@ Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set 
               "---",
               {
                 filter: [Scratch.TargetType.SPRITE],
+                opcode: "motion_isinxy",
+                blockType: Scratch.BlockType.BOOLEAN,
+                text: Scratch.translate("is in between x [X1] to [X2] and y [Y1] to [Y2]"),
+                hideFromPalette: true,
+                arguments: {
+                  X1: {
+                    type: Scratch.ArgumentType.NUMBER,
+                    defaultValue: "-240",
+                  },
+                  X2: {
+                    type: Scratch.ArgumentType.NUMBER,
+                    defaultValue: "240",
+                  },
+                  Y1: {
+                    type: Scratch.ArgumentType.NUMBER,
+                    defaultValue: "-180",
+                  },
+                  Y2: {
+                    type: Scratch.ArgumentType.NUMBER,
+                    defaultValue: "180",
+                  },
+                },
+              },
+              "---",
+              {
+                filter: [Scratch.TargetType.SPRITE],
                 opcode: "motion_rotationStyle",
                 blockType: Scratch.BlockType.REPORTER,
                 text: Scratch.translate("rotation style"),
@@ -192,18 +219,18 @@ Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set 
       }
       motion_setmyHome(_, util){
         const target = util.target;
-        localStorage.setItem('MOTION-EXPANSION' + 'X-POSITION', this._limitPrecision(target.x))
+        return localStorage.setItem('MOTION-EXPANSION' + 'X-POSITION', this._limitPrecision(target.x)),
         localStorage.setItem('MOTION-EXPANSION' + 'Y-POSITION', this._limitPrecision(target.y))
       }
       motion_setmyHomeTo(args, util){
-        localStorage.setItem('MOTION-EXPANSION' + 'X-POSITION', this._limitPrecision(args.X))
-        localStorage.setItem('MOTION-EXPANSION' + 'Y-POSITION', this._limitPrecision(args.Y))
+        return localStorage.setItem('MOTION-EXPANSION' + 'X-POSITION', /*this._limitPrecision*/(args.X)),
+        localStorage.setItem('MOTION-EXPANSION' + 'Y-POSITION', /*this._limitPrecision*/(args.Y))
       }
       motion_gotoHome(_, util){
         const target = util.target;
         let x = localStorage.getItem('MOTION-EXPANSION' + 'X-POSITION');
         let y = localStorage.getItem('MOTION-EXPANSION' + 'Y-POSITION');
-        target.setXY(x, y);
+        return target.setXY(x, y);
       }
       motion_pointawayfrom(args, util) {
         let targetX = 0;
@@ -222,7 +249,7 @@ Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set 
         const dx = targetX - util.target.x;
         const dy = targetY - util.target.y;
         const direction = 90 - this._radToDeg(Math.atan2(dy, dx));
-        util.target.setDirection(direction - 180);
+        return util.target.setDirection(direction - 180);
       }
       motion_steptowards(args, util) {
         const x = Scratch.Cast.toNumber(args.X);
@@ -231,9 +258,9 @@ Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set 
         const val =
           steps / Math.sqrt((x - util.target.x) ** 2 + (y - util.target.y) ** 2);
         if (val >= 1) {
-          util.target.setXY(x, y);
+          return util.target.setXY(x, y);
         } else {
-          util.target.setXY(
+          return util.target.setXY(
             (x - util.target.x) * val + util.target.x,
             (y - util.target.y) * val + util.target.y
           );
@@ -244,7 +271,7 @@ Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set 
         const y = Scratch.Cast.toNumber(args.Y);
         const val = Scratch.Cast.toNumber(args.PERCENT);
         // Essentially a smooth glide script.
-        util.target.setXY(
+        return util.target.setXY(
           (x - util.target.x) * (val / 100) + util.target.x,
           (y - util.target.y) * (val / 100) + util.target.y
         );
@@ -254,7 +281,7 @@ Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set 
           util.target.drawableID,
           [util.target.x, util.target.y]
         );
-        util.target.setXY(newpos[0], newpos[1]);
+        return util.target.setXY(newpos[0], newpos[1]);
       }
       motion_touchingxy(args, util) {
         const x = Scratch.Cast.toNumber(args.X);
@@ -324,6 +351,9 @@ Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set 
           }
         }
         return false;
+      }
+      motion_isinxy(args, util) {
+        return !(((util.target.x < (Scratch.Cast.toNumber(args.X1) + 1)) || (util.target.x > (Scratch.Cast.toNumber(args.X2) - 1))) && ((util.target.y < (Scratch.Cast.toNumber(args.Y1) + 1)) || (util.target.y > (Scratch.Cast.toNumber(args.Y2) - 1))))
       }
       motion_rotationStyle(args, util) {
         return util.target.rotationStyle;
