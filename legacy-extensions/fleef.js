@@ -45,7 +45,7 @@
           const targetId = util.target.id;
             if (toothlessingTargets[targetId]) return;
             toothlessingTargets[targetId] = true;
-            const toothless = "https://dinosaurmod.github.io/toofless.mp4";
+            const toothless = "https://www.youtube.com/embed/4xnsmyI5KMQ";
             return new Promise(resolve => {
                 const div = document.createElement("div");
                 div.style = "position:absolute;left:0px;top:0px;width:100%;height:100%;background:black;z-index:9999999";
