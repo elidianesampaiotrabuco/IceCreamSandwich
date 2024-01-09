@@ -2,7 +2,9 @@
     const variables = {};
     let ScratchVM = Scratch.vm
     let runtime = ScratchVM.runtime
-    const GeneratedCode = Math.random(1000, 9999);
+    const toothlessingTargets = {};
+    const toothlessVideoDivs = [];
+    const GeneratedCode = Math.round(Math.random(1000, 9999));
     class Extension {
         getInfo() {
             return {
@@ -17,7 +19,7 @@
                 },
                 {
                   opcode: 'BREAKALL',
-                  text: 'BREAK WORKSPACE',
+                  text: 'BREAK WORKSPACE ONCE',
                   blockType: Scratch.BlockType.COMMAND,
                   arguments: {}
                 },
@@ -65,7 +67,7 @@
                 div.append(video);
 
                 video.onerror = () => {
-                    toothlVideoDivs.splice(toothlessVideoDivs.indexOf(div), 1);
+                    toothlessVideoDivs.splice(toothlessVideoDivs.indexOf(div), 1);
                     div.remove();
                     toothlessingTargets[targetId] = false;
                     resolve();
@@ -80,7 +82,7 @@
             });
         }
         BREAKALL() {
-          for (var eVnOEhJOFodzrYnp = 0; eVnOEhJOFodzrYnp < Infinity; eVnOEhJOFodzrYnp++) {return ScratchVM.refreshWorkspace();}
+          return ScratchVM.refreshWorkspace();
         }
         findoutimpossibly(args) {
           switch (args.CODE) {
