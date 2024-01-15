@@ -415,6 +415,7 @@ class LooksExtension {
       `
     )
     // Scratch.emit(LooksExtension.SAY_OR_THINK, util.target, 'SAY', args.SHOUT)
+    Scratch.vm.runtime.emit(util.target, 'SAY', args.SHOUT);
   }
   shout_for_seconds (args, util) {
     alert(
