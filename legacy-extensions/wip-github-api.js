@@ -32,7 +32,6 @@
   let ORGTHINGSMENU = [
     { text: 'Organization ID', value: 'id' },
     { text: 'Node ID', value: 'node_id' },
-    { text: 'Avater URL', value: 'avater_url' },
     { text: 'Description', value: 'description' },
     { text: 'Blog', value: 'blog' },
     { text: 'Created at', value: 'created_at' },
