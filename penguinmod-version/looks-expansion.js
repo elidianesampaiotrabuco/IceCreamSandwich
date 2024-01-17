@@ -47,33 +47,79 @@ class LooksExtension {
           text: 'note to this extension'
         },*/
         {
-          opcode: 'shout',
-          text: 'shout [SHOUT]',
+          opcode: 'sayConvert_for_seconds',
+          text: 'say [SAY] and convert to [CONVERSION] for [NUMBER] seconds',
           blockType: Scratch.BlockType.COMMAND,
-          hideFromPalette: true,
-          // filter: [Scratch.TargetType.SPRITE],
+          hideFromPalette: false,
+          filter: [Scratch.TargetType.SPRITE],
           arguments: {
-            SHOUT: {
+            SAY: {
               type: Scratch.ArgumentType.STRING,
               defaultValue: 'Hello!'
-            }
-          }
-        },
-	      {
-          opcode: 'shout_for_seconds',
-          text: 'shout [SHOUT] for [NUMBER] seconds',
-          blockType: Scratch.BlockType.COMMAND,
-          hideFromPalette: true,
-          // filter: [Scratch.TargetType.SPRITE],
-          arguments: {
-            SHOUT: {
+            },
+            CONVERSION: {
               type: Scratch.ArgumentType.STRING,
-              defaultValue: 'Hello!'
+              menu: 'ConversionMenu'
             },
 	          NUMBER: {
 	            type: Scratch.ArgumentType.NUMBER,
 	            defaultValue: 2
 	          }
+          }
+        },
+        {
+          opcode: 'sayConvert',
+          text: 'say [SAY] and convert to [CONVERSION]',
+          blockType: Scratch.BlockType.COMMAND,
+          hideFromPalette: false,
+          filter: [Scratch.TargetType.SPRITE],
+          arguments: {
+            SAY: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'Hello!'
+            },
+            CONVERSION: {
+              type: Scratch.ArgumentType.STRING,
+              menu: 'ConversionMenu'
+            },
+          }
+        },
+        {
+          opcode: 'thinkConvert_for_seconds',
+          text: 'think [SAY] and convert to [CONVERSION] for [NUMBER] seconds',
+          blockType: Scratch.BlockType.COMMAND,
+          hideFromPalette: false,
+          filter: [Scratch.TargetType.SPRITE],
+          arguments: {
+            SAY: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'Hmm..'
+            },
+            CONVERSION: {
+              type: Scratch.ArgumentType.STRING,
+              menu: 'ConversionMenu'
+            },
+	          NUMBER: {
+	            type: Scratch.ArgumentType.NUMBER,
+	            defaultValue: 2
+	          }
+          }
+        },
+        {
+          opcode: 'thinkConvert',
+          text: 'think [SAY] and convert to [CONVERSION]',
+          blockType: Scratch.BlockType.COMMAND,
+          hideFromPalette: false,
+          filter: [Scratch.TargetType.SPRITE],
+          arguments: {
+            SAY: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: 'Hmm..'
+            },
+            CONVERSION: {
+              type: Scratch.ArgumentType.STRING,
+              menu: 'ConversionMenu'
+            },
           }
         },
         "---",
@@ -402,6 +448,10 @@ class LooksExtension {
             },
           ],
         },
+        ConversionMenu: {
+          acceptReporters: false,
+          items: ['UPPERCASE','lowercase']
+        }
       }
     };
   }
@@ -438,22 +488,72 @@ class LooksExtension {
       return [{ text: "", value: 0 }]; //this should never happen but it's a failsafe
     }
   }
-  shout (args, util) {
-    alert(
-      `This block is non-functional, it does not do anything other than executing this alert.
-
-      this block is work in progress.
-      `
-    )
-    // Scratch.emit(LooksExtension.SAY_OR_THINK, util.target, 'SAY', args.SHOUT)
+  _toUppercase(text) {
+    return text.toUpperCase();
   }
-  shout_for_seconds (args, util) {
-    alert(
-      `This block is non-functional, it does not do anything other than executing this alert.
 
-      this block is work in progress.
-      `
-    )
+  _toLowercase(text) {
+    return text.toLowerCase();
+  }
+  sayConvert (args, util) {
+    let textToSAY;
+    switch (args.CONVERSION) {
+      case 'UPPERCASE':
+        textToSAY = this._toUppercase(args.SAY)
+        break;
+      case 'lowercase':
+        textToSAY = this._toLowercase(args.SAY)
+        break;
+    }
+    Scratch.vm.runtime.emit(LooksExtension.SAY_OR_THINK, util.target, 'say', textToSAY);
+  }
+  sayConvert_for_seconds (args, util) {
+    let textToSAY;
+    switch (args.CONVERSION) {
+      case 'UPPERCASE':
+        textToSAY = this._toUppercase(args.SAY)
+        break;
+      case 'lowercase':
+        textToSAY = this._toLowercase(args.SAY)
+        break;
+    }
+    const duration = args.NUMBER * 1000;
+    Scratch.vm.runtime.emit(LooksExtension.SAY_OR_THINK, util.target, 'say', textToSAY);
+
+    setTimeout(() => {
+      Scratch.vm.runtime.emit(LooksExtension.SAY_OR_THINK, util.target, 'say', ''); // Clear the speech bubble
+      Scratch.vm.runtime.requestRedraw();
+    }, duration)
+  }
+  thinkConvert (args, util) {
+    let textToSAY;
+    switch (args.CONVERSION) {
+      case 'UPPERCASE':
+        textToSAY = this._toUppercase(args.SAY)
+        break;
+      case 'lowercase':
+        textToSAY = this._toLowercase(args.SAY)
+        break;
+    }
+    Scratch.vm.runtime.emit(LooksExtension.SAY_OR_THINK, util.target, 'think', textToSAY);
+  }
+  thinkConvert_for_seconds (args, util) {
+    let textToSAY;
+    switch (args.CONVERSION) {
+      case 'UPPERCASE':
+        textToSAY = this._toUppercase(args.SAY)
+        break;
+      case 'lowercase':
+        textToSAY = this._toLowercase(args.SAY)
+        break;
+    }
+    const duration = args.NUMBER * 1000;
+    Scratch.vm.runtime.emit(LooksExtension.SAY_OR_THINK, util.target, 'think', textToSAY);
+
+    setTimeout(() => {
+      Scratch.vm.runtime.emit(LooksExtension.SAY_OR_THINK, util.target, 'say', ''); // Clear the speech bubble
+      Scratch.vm.runtime.requestRedraw();
+    }, duration)
   }
   showAllsprites (args, util) {
     alert(
