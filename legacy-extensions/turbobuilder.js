@@ -68,7 +68,7 @@
                     func: 'addFunctionality',
                     text: 'add function [FUNCTIONALITY] / BlockID [BLOCKID]',
                     blockType: Scratch.BlockType.COMMAND,
-                    hideFromPalette: true,
+                    hideFromPalette: false,
                     arguments: {
                       FUNCTIONALITY: {
                         type: Scratch.ArgumentType.STRING,
@@ -192,85 +192,44 @@
         let LocalStorage_JS = localStorage.getItem("SAVE-EXT-" + "JS");
         let BlockID = args.BLOCKID;
         let Function = args.FUNCTIONALITY;
-        let { constant1, constant2 } = this._splitString(LocalStorage_JS, `Extension.prototype['${BlockID}'] = (args, util) => {
+        let [ firstPart, middlePart, secondPart ] = this._splitByTwo(LocalStorage_JS, `Extension.prototype['${BlockID}'] = (args, util) => {
           `, `};`)
-        let AfterMath = (constant1 + Function + constant2)
+        let AfterMath = (firstPart + Function + secondPart)
         localStorage.setItem("SAVE-EXT-" + "JS", AfterMath);
       }
       addInput(args, util) {
-        let InputID = args.ID;
-        let InputTEXT = args.TEXT;
-        let InputArgument = args.ARGUMENU;
-        let BlockID = args.BlockID;
-        let LocalStorage_JS = localStorage.getItem("SAVE-EXT-" + "JS");
-        let LatestInputID = localStorage.getItem("SAVE-EXT-" + "LatestInputID");
-        let LatestInputArgument = localStorage.getItem("SAVE-EXT-" + "LatestInputArgument");
-        let LatestInputText = localStorage.getItem("SAVE-EXT-" + "LatestInputText");
-        let Split1 = '';
-        if (LatestInputID === 'Blank', LatestInputArgument === 'Blank', LatestInputText === 'Blank') {
-          Split1 = `'${BlockID}',
-          arguments: {`;
-          // localStorage.setItem("SAVE-EXT-" + "SPLIT", Split1);
-          localStorage.setItem("SAVE-EXT-" + "LatestInputID", InputID);
-        localStorage.setItem("SAVE-EXT-" + "LatestInputArgument", InputArgument);
-        localStorage.setItem("SAVE-EXT-" + "LatestInputText", InputTEXT);
-        let Script = `"${InputID}": {
-          type: Scratch.ArgumentType.${InputArgument},
-          defaultValue: '${InputTEXT}',
-        },
-      `;
-        let { constant1, constant2 } = this._splitString(LocalStorage_JS, Split1, `}
-    });`);
-        let JS = (constant1 + Script + constant2);
-        localStorage.setItem("SAVE-EXT-" + "JS", JS);
-        } else {
-          Split1 = `"${LatestInputID}": {
+        let Script1 = `"${LatestInputID}": {
             type: Scratch.ArgumentType.${LatestInputArgument},
             defaultValue: '${LatestInputText}',
           },
         `;
-        
-        localStorage.setItem("SAVE-EXT-" + "LatestInputID", InputID);
-        localStorage.setItem("SAVE-EXT-" + "LatestInputArgument", InputArgument);
-        localStorage.setItem("SAVE-EXT-" + "LatestInputText", InputTEXT);
-        let Script = `"${InputID}": {
+        let Script2 = `"${InputID}": {
           type: Scratch.ArgumentType.${InputArgument},
           defaultValue: '${InputTEXT}',
         },
       `;
-        let { constant1, constant2 } = this._splitString(LocalStorage_JS, Split1, `}
-    });`);
-        let JS = (constant1 + Script + constant2);
-        localStorage.setItem("SAVE-EXT-" + "JS", JS);
-        };
-        /*
-        localStorage.setItem("SAVE-EXT-" + "LatestInputID", InputID);
-        localStorage.setItem("SAVE-EXT-" + "LatestInputArgument", InputArgument);
-        localStorage.setItem("SAVE-EXT-" + "LatestInputText", InputTEXT);
-        let Script = `"${InputID}": {
-          type: Scratch.ArgumentType.${InputArgument},
-          defaultValue: '${InputTEXT}',
-        },
-      `;
-        let { constant1, constant2 } = this._splitString(LocalStorage_JS, Split1, `}
-    });`);
-        let JS = (constant1 + Script + constant2);
-        localStorage.setItem("SAVE-EXT-" + "JS", JS);
-        */
       }
-      _splitString(majorString, substring1, substring2) {
-          const index1 = majorString.indexOf(substring1);
-          const index2 = majorString.indexOf(substring2);
-        
-          if (index1 !== -1 && index2 !== -1) {
-            let constant1 = majorString.slice(0, index1 + substring1.length);
-            let constant2 = majorString.slice(index2 + substring2.length);
-        
-            return { constant1, constant2 };
-          } else {
-            console.error('One or both substrings not found in the major string.');
-            return null;
-          }
+      _splitByTwo(input, splitValue1, splitValue2) {
+        // Find the indices of the split values in the input
+        let splitIndex1 = input.indexOf(splitValue1);
+        let splitIndex2 = input.indexOf(splitValue2);
+    
+        // Check if both split values are found in the input
+        if (splitIndex1 !== -1 && splitIndex2 !== -1) {
+            // Determine the starting and ending indices for the split
+            let startIndex = Math.min(splitIndex1, splitIndex2);
+            let endIndex = Math.max(splitIndex1 + String(splitValue1).length, splitIndex2 + String(splitValue2).length);
+    
+            // Split the input into two parts based on the specified values
+            let firstPart = input.slice(0, startIndex);
+            let middlePart = input.slice(startIndex, endIndex);
+            let secondPart = input.slice(endIndex);
+    
+            return [firstPart, middlePart, secondPart];
+        } else {
+            // Handle case where one or both split values are not found
+            return "One or both split values not found in the input.";
+        }
       }
   }
 
