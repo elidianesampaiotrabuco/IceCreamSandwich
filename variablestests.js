@@ -20,11 +20,11 @@
                             }
                         }
                     }
-                    SetVarToVar(){
-
-                    }
                 ]
             }
+        }
+        SetVarToVar(){
+            
         }
     }
     Scratch.extensions.register(new Extension())
