@@ -17,7 +17,7 @@
                   text: 'reporter',
                   blockType: Scratch.BlockType.REPORTER,
                   arguments: {}
-                },
+                }, 
                 {
                   opcode: 'c',
                   text: 'boolean',
