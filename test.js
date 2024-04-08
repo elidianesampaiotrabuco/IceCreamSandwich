@@ -40,6 +40,16 @@
                         isTerminal: true,
                         arguments: {},
                       },
+                      {
+                        opcode: 'Shout',
+                        text: 'shout [SHOUT]',
+                        blockType: Scratch.BlockType.COMMAND,
+                        arguments: {
+                            SHOUT: {
+                                type: Scratch.ArgumentType.STRING
+                            }
+                        },
+                      },
                 ]
             }
         }
@@ -54,6 +64,9 @@
         }
         BRANCHES(){
             return ' ';
+        }
+        Shout (args, util) {
+            Scratch.vm.runtime.emit(LooksExtension.SAY_OR_THINK, util.target, 'shout', args.SHOUT);
         }
     }
 
