@@ -13,6 +13,10 @@
               color1: "#ff6680",
               blocks: [
                   {
+                    blockType: Scratch.BlockType.LABEL,
+                    text: 'Functions'
+                  },
+                  {
                     func: 'JScodeClipboard',
                     blockType: Scratch.BlockType.BUTTON,
                     text: 'copy extension code to clipboard'
@@ -46,7 +50,7 @@
                   {
                     opcode: 'TurboBuilder_createblock',
                     func: 'createblock',
-                    text: 'create block / id [ID] text [TEXT] blockType: [BLOCKTYPE_MENU]',
+                    text: 'create block / id [ID] text [TEXT] blockType: [BLOCKTYPE_MENU] function: [FUNCTION]',
                     blockType: Scratch.BlockType.COMMAND,
                     arguments: {
                       ID: {
@@ -61,8 +65,12 @@
                         type: Scratch.ArgumentType.STRING,
                         menu: 'BLOCKTYPE_MENU'
                       },
+                      FUNCTION: {
+                        type: Scratch.ArgumentType.STRING,
+                        defaultValue: 'return \'hello world\'\; '
+                      },
                     },
-                  },
+                  },/*
                   {
                     opcode: 'TurboBuilder_addFunctionality',
                     func: 'addFunctionality',
@@ -79,7 +87,7 @@
                         defaultValue: 'ID'
                       },
                     },
-                  },
+                  },*/
                   {
                     opcode: 'TurboBuilder_addInput',
                     func: 'addInput',
@@ -102,6 +110,71 @@
                       ARGUMENU: {
                         type: Scratch.ArgumentType.STRING,
                         menu: 'ARGUMENU'
+                      },
+                    }
+                  },
+                  {
+                    opcode: 'TurboBuilder_functionid',
+                    func: 'functionid',
+                    text: 'function id [ID] function [TEXT]',
+                    blockType: Scratch.BlockType.COMMAND,
+                    arguments: {
+                      ID: {
+                        type: Scratch.ArgumentType.STRING,
+                        defaultValue: "ID"
+                      },
+                      TEXT: {
+                        type: Scratch.ArgumentType.STRING,
+                        defaultValue: ''
+                      },
+                    },
+                  },
+                  {
+                    opcode: 'TurboBuilder_CallID',
+                    func: 'CallID',
+                    text: 'call [ID]',
+                    blockType: Scratch.BlockType.REPORTER,
+                    arguments: {
+                      ID: {
+                        type: Scratch.ArgumentType.STRING,
+                        defaultValue: ''
+                      },
+                    }
+                  },
+                  "---",
+                  {
+                    opcode: 'TurboBuilder_returnValue',
+                    func: 'returnValue',
+                    text: 'return [TEXT]',
+                    blockType: Scratch.BlockType.REPORTER,
+                    arguments: {
+                      TEXT: {
+                        type: Scratch.ArgumentType.STRING,
+                        defaultValue: "true"
+                      },
+                    }
+                  },
+                  {
+                    opcode: 'TurboBuilder_String',
+                    func: 'String',
+                    text: '\'[TEXT]\'',
+                    blockType: Scratch.BlockType.REPORTER,
+                    arguments: {
+                      TEXT: {
+                        type: Scratch.ArgumentType.STRING,
+                        defaultValue: "string"
+                      },
+                    }
+                  },
+                  {
+                    opcode: 'TurboBuilder_Number',
+                    func: 'Number',
+                    text: '\([NUMBER]\)',
+                    blockType: Scratch.BlockType.REPORTER,
+                    arguments: {
+                      NUMBER: {
+                        type: Scratch.ArgumentType.NUMBER,
+                        defaultValue: "0"
                       },
                     }
                   },
@@ -174,6 +247,7 @@
         const BlockID = args.ID;
         const BlockText = args.TEXT;
         const BlockType = args.BLOCKTYPE_MENU;
+        const Function = args.FUNCTION;
 
         const Script = `blocks.push({
         blockType: Scratch.BlockType.${BlockType},
@@ -182,7 +256,7 @@
         arguments: {}
       });
       Extension.prototype['${BlockID}'] = (args, util) => {
-        
+        ${Function}
       };
       `;
       const LocalStorage_JS = localStorage.getItem("SAVE-EXT-" + "JS");
@@ -208,6 +282,29 @@
           defaultValue: '${InputTEXT}',
         },
       `;
+      }
+      functionid(args, util) {
+        const FunctionID = args.ID;
+        const FunctionScript = args.TEXT;
+
+        const Script = `function ${FunctionID} {
+          ${FunctionScript}
+        }
+      `;
+      const LocalStorage_JS = localStorage.getItem("SAVE-EXT-" + "JS");
+      localStorage.setItem("SAVE-EXT-" + "JS", LocalStorage_JS + Script);
+      }
+      returnValue(args, util){
+        return ("return " + args.TEXT + ";")
+      }
+      String(args, util){
+        return ("\'" + args.TEXT + "\'")
+      }
+      Number(args, util){
+        return ("\(" + args.NUMBER + "\)")
+      }
+      CallID(args, util){
+        return args.ID + "()"
       }
       _splitByTwo(input, splitValue1, splitValue2) {
         // Find the indices of the split values in the input
