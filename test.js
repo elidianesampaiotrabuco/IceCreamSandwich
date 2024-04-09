@@ -2,6 +2,9 @@
 
 (function (Scratch) {
     class Extension {
+        static get SAY_OR_THINK () {
+            return 'SAY';
+        }
         getInfo() {
             return {
                 name: "Test Extension",
@@ -46,7 +49,7 @@
                         blockType: Scratch.BlockType.COMMAND,
                         arguments: {
                             SHOUT: {
-                                type: Scratch.ArgumentType.STRING
+                                type: Scratch.ArgumentType.STRING,
                             }
                         },
                       },
@@ -66,7 +69,7 @@
             return ' ';
         }
         Shout (args, util) {
-            Scratch.vm.runtime.emit(LooksExtension.SAY_OR_THINK, util.target, 'shout', args.SHOUT);
+            Scratch.vm.runtime.emit(Extension.SAY_OR_THINK, util.target, 'shout', args.SHOUT);
         }
     }
 

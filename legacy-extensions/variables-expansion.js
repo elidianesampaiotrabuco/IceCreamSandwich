@@ -19,11 +19,11 @@
                                 type: Scratch.ArgumentType.STRING
                             }
                         }
-                    }
+                    },
                 ]
             }
         }
-        SetVarToVar(){
+        SetVarToVar(args, util){
             
         }
     }
