@@ -3,17 +3,17 @@
     class Extension {
         getInfo() {
             return {
-              id: "EVENT",
-              name: "Events Category",
-              color1: '#ffbf00',
-              color2: '#cc9900',
+              id: "CONTROL",
+              name: "Control Category",
+              color1: '#ffab19',
+              color2: '#cf8b17',
               blocks: [
                 {
                     blockType: Scratch.BlockType.XML,
-                    xml: `<block type="event_whenjavascript">
+                    xml: `<block type="control_javascript_command">
                     <value name="JS">
                         <shadow type="text">
-                            <field name="TEXT">false</field>
+                            <field name="TEXT">alert('hello!')</field>
                         </shadow>
                     </value>
                 </block>`,

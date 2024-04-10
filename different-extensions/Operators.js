@@ -3,17 +3,27 @@
     class Extension {
         getInfo() {
             return {
-              id: "EVENT",
-              name: "Events Category",
-              color1: '#ffbf00',
-              color2: '#cc9900',
+              id: "OPERATORS",
+              name: "Operators Category",
+              color1: '#59c059',
+              color2: '#389438',
               blocks: [
                 {
                     blockType: Scratch.BlockType.XML,
-                    xml: `<block type="event_whenjavascript">
+                    xml: `<block type="operator_javascript_output">
                     <value name="JS">
                         <shadow type="text">
-                            <field name="TEXT">false</field>
+                            <field name="TEXT">Math.random()</field>
+                        </shadow>
+                    </value>
+                </block>`,
+                },
+                {
+                    blockType: Scratch.BlockType.XML,
+                    xml: `<block type="operator_javascript_boolean">
+                    <value name="JS">
+                        <shadow type="text">
+                            <field name="TEXT">Math.round(Math.random()) === 1</field>
                         </shadow>
                     </value>
                 </block>`,
