@@ -235,6 +235,27 @@ class LooksExtension {
           },
         },
         {
+          opcode: "changeeffectoftarget",
+          blockType: Scratch.BlockType.COMMAND,
+          text: "change [EFFECT] effect of [TARGET] to [NUMBER]",
+          // hideFromPalette: false,
+          arguments: {
+            EFFECT: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: "color",
+              menu: "effectMenu",
+            },
+            TARGET: {
+              type: Scratch.ArgumentType.STRING,
+              menu: "spriteMenu",
+            },
+	          NUMBER: {
+	            type: Scratch.ArgumentType.NUMBER,
+	            defaultValue: 0
+	          }
+          },
+        },
+        {
           opcode: "seteffectoftarget",
           blockType: Scratch.BlockType.COMMAND,
           text: "set [EFFECT] effect of [TARGET] to [NUMBER]",
@@ -709,7 +730,7 @@ class LooksExtension {
       const name = Scratch.Cast.toString(args.EFFECT);
       const effect = Scratch.Cast.toString(args.EFFECT)
       let number = Scratch.Cast.toNumber(args.NUMBER);
-      let value = (number + effects[name])
+      let value = (Number(number) + Number(effects[name]))
       util.target.setEffect(effect, value);
     }
     // copied from https://extensions.turbowarp.org/Lily/LooksPlus.js
