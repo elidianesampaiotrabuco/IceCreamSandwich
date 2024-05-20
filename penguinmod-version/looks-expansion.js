@@ -237,7 +237,7 @@ class LooksExtension {
         {
           opcode: "changeeffectoftarget",
           blockType: Scratch.BlockType.COMMAND,
-          text: "change [EFFECT] effect of [TARGET] to [NUMBER]",
+          text: "change [EFFECT] effect of [TARGET] by [NUMBER]",
           // hideFromPalette: false,
           arguments: {
             EFFECT: {
