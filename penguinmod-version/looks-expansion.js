@@ -238,7 +238,7 @@ class LooksExtension {
           opcode: "seteffectoftarget",
           blockType: Scratch.BlockType.COMMAND,
           text: "set [EFFECT] effect of [TARGET] to [NUMBER]",
-          hideFromPalette: true,
+          // hideFromPalette: false,
           arguments: {
             EFFECT: {
               type: Scratch.ArgumentType.STRING,
@@ -673,21 +673,44 @@ class LooksExtension {
       return Scratch.Color.decimalToHex(effects.tintColor - 1);
     }
     seteffectoftarget(args, util) {
+      /*
       alert(
         `This block is non-functional, it does not do anything other than executing this alert.
   
         this block is work in progress.
         `
       )
+      const effects = target.effects;
+      const name = Scratch.Cast.toString(args.EFFECT);
+      effects[name]=args.NUMBER;
+      */
+      const target = getSpriteTargetByName(util, args.TARGET);
+      if (!target) {
+        return;
+      }
+      const effect = Scratch.Cast.toString(args.EFFECT)
+      let value = Scratch.Cast.toNumber(args.NUMBER);
+      util.target.setEffect(effect, value);
+    }
+    changeeffectoftarget(args, util) {
       /*
+      alert(
+        `This block is non-functional, it does not do anything other than executing this alert.
+  
+        this block is work in progress.
+        `
+      )
+      */
       const target = getSpriteTargetByName(util, args.TARGET);
       if (!target) {
         return;
       }
       const effects = target.effects;
       const name = Scratch.Cast.toString(args.EFFECT);
-      effects[name]=args.NUMBER;
-      */
+      const effect = Scratch.Cast.toString(args.EFFECT)
+      let number = Scratch.Cast.toNumber(args.NUMBER);
+      let value = (number + effects[name])
+      util.target.setEffect(effect, value);
     }
     // copied from https://extensions.turbowarp.org/Lily/LooksPlus.js
     snapshotStage(args, util) {
