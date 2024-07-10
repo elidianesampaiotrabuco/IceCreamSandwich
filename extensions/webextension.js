@@ -1,6 +1,19 @@
 /*
     name: Site Runtime
     description: A Combined version of 2 Extensions: Packager Applications & AdaBrowser
+
+    if (!('userAgent' in navigator)) return 'Unknown';
+          const agent = navigator.userAgent;
+          if (!navigator.userAgent.includes('Firefox')) {
+              return 'Firefox';
+          }
+          // Apparently Dinosaurmod cannot be loaded in IE 11 (the last supported version)
+          // if (agent.includes('MSIE') || agent.includes('rv:')) {
+          //     return 'Internet Explorer';
+          // }
+          if (agent.includes('Safari')) {
+              return 'Safari';
+          }
 */
 
 (function(Scratch) {
@@ -219,6 +232,7 @@
                     opcode: 'WebExt_Favicon',
                     text: 'use [URL] as favicon',
                     blockType: Scratch.BlockType.COMMAND,
+                    hideFromPalette: (navigator.userAgent.includes('Safari')),
                     arguments: {
                         URL: {
                             type: Scratch.ArgumentType.STRING,
@@ -466,11 +480,13 @@
                         type: Scratch.ArgumentType.STRING,
                         menu: 'WAKELOCK_MENU'
                       }
-                    }
+                    },
+                    hideFromPalette: (navigator.userAgent.includes('Firefox'))
                   },
                   {
                     opcode: 'WebExt_isWakeLock',
                     text: 'is wake lock enabled?',
+                    hideFromPalette: (navigator.userAgent.includes('Firefox')),
                     blockType: Scratch.BlockType.BOOLEAN,
                     arguments: {}
                   },
@@ -481,6 +497,7 @@
                   {
                     opcode: 'WebExt_shareURL',
                     blockType: Scratch.BlockType.COMMAND,
+                    hideFromPalette: (navigator.userAgent.includes('Firefox')) || (navigator.userAgent.includes('Safari')),
                     text: 'share URL [URL] with [TITLE] and message [MESSAGE]',
                     arguments: {
                       URL: {
@@ -501,6 +518,7 @@
                     opcode: 'WebExt_canShareURL',
                     text: 'can share URL?',
                     blockType: Scratch.BlockType.BOOLEAN,
+                    hideFromPalette: (navigator.userAgent.includes('Firefox')) || (navigator.userAgent.includes('Safari')),
                     arguments: {}
                   },
                   {
@@ -666,13 +684,13 @@
             it in a script with other blocks, it will yield 
             briefly, so try keeping it separate from your 
             other scripts. The "is wake lock active?" 
-            boolean reporter, however, does not have a delay.
-
+            boolean reporter, however, does not have a delay.`
+/*
             These Specific Blocks don't work in the browsers:
             The Set Favicon Block does not work in Safari.
             Firefox does not have the "Sharing URL" feature.
             The "Sharing URL" Block breaks Safari Navigator.
-            Firefox does not support the "Wake Lock" feature.`
+            Firefox does not support the "Wake Lock" feature.*/
           )
         }
         WebExt_CurrentUrl(args, util) {
