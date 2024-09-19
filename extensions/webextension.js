@@ -1,19 +1,6 @@
 /*
     name: Site Runtime
     description: A Combined version of 2 Extensions: Packager Applications & AdaBrowser
-
-    if (!('userAgent' in navigator)) return 'Unknown';
-          const agent = navigator.userAgent;
-          if (!navigator.userAgent.includes('Firefox')) {
-              return 'Firefox';
-          }
-          // Apparently Dinosaurmod cannot be loaded in IE 11 (the last supported version)
-          // if (agent.includes('MSIE') || agent.includes('rv:')) {
-          //     return 'Internet Explorer';
-          // }
-          if (agent.includes('Safari')) {
-              return 'Safari';
-          }
 */
 
 (function(Scratch) {
@@ -46,6 +33,17 @@
     document.body.appendChild(videoElement);
 
     let mediaStream = null;
+
+    let ABCTenabled = false;
+
+    window.addEventListener("beforeunload", (e) => {
+      if (ABCTenabled) {
+        e.preventDefault();
+      }
+    });
+
+    const IsFireFox = (navigator.userAgent.includes('Firefox'))
+    const IsSafari = (navigator.userAgent.includes('Safari'))
 
     class Extension {
       constructor(runtime) {
@@ -88,6 +86,28 @@
                   {
                     opcode: 'WebExt_CurrentIP',
                     text: 'current ip',
+                    blockType: Scratch.BlockType.REPORTER,
+                    arguments: {}
+                  },
+                  {
+                    blockType: "label",
+                    text: "Other Current _ Blocks",
+                  },
+                  {
+                    opcode: 'WebExt_CurrentDomain',
+                    text: 'current domain name',
+                    blockType: Scratch.BlockType.REPORTER,
+                    arguments: {}
+                  },
+                  {
+                    opcode: 'WebExt_CurrentPath',
+                    text: 'current path name',
+                    blockType: Scratch.BlockType.REPORTER,
+                    arguments: {}
+                  },
+                  {
+                    opcode: 'WebExt_CurrentProtocol',
+                    text: 'current protocol',
                     blockType: Scratch.BlockType.REPORTER,
                     arguments: {}
                   },
@@ -643,8 +663,66 @@
                   },
                   {
                     blockType: "label",
+                    text: "Ask Before Closing Tab\n(Credits to CubesterYT)",
+                  },
+                  {
+                    opcode: "WebExt_setControl",
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: "set ask before closing tab to [OPTION]",
+                    arguments: {
+                      OPTION: {
+                        type: Scratch.ArgumentType.STRING,
+                        menu: "ABCT_OPTION",
+                      },
+                    },
+                  },
+                  {
+                    opcode: "WebExt_getControl",
+                    blockType: Scratch.BlockType.BOOLEAN,
+                    text: "ask before closing tab enabled?",
+                  },
+                  {
+                    blockType: "label",
+                    text: "Cookies",
+                  },
+                  {
+                    opcode: "WebExt_cookiesEnabled",
+                    blockType: Scratch.BlockType.REPORTER,
+                    text: "are cookies enabled?",
+                  },
+                  {
+                    blockType: "label",
+                    text: "Other",
+                  },
+                  {
+                    opcode: 'WebExt_reloadpage',
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: 'reload page',
+                    arguments: {}
+                  },
+                  {
+                    blockType: "label",
                     text: "Dangerous!",
                   },
+                  {
+                    blockType: "label",
+                    text: "History",
+                  },
+                  {
+                    opcode: 'WebExt_goforward',
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: 'go to next url in history',
+                    isTerminal: true,
+                    arguments: {}
+                  },
+                  {
+                    opcode: 'WebExt_goback',
+                    blockType: Scratch.BlockType.COMMAND,
+                    text: 'go to previous url in history',
+                    isTerminal: true,
+                    arguments: {}
+                  },
+                  "---",
                   {
                     opcode: 'WebExt_closetab',
                     blockType: Scratch.BlockType.COMMAND,
@@ -672,13 +750,25 @@
                       { text: "window", value: "window" },
                     ]
                   },
+                  ABCT_OPTION: {
+                    acceptReporters: true,
+                    items: [
+                      {
+                        text: "enabled",
+                        value: "true",
+                      },
+                      {
+                        text: "disabled",
+                        value: "false",
+                      },
+                    ],
+                  },
                 }
             };
         }
         WebExt_Notify() {
           alert(
-            `Note for some Blocks:
-            
+            `
             The wake lock block takes a moment to finish 
             running as it activates wake lock, so if you put 
             it in a script with other blocks, it will yield 
@@ -753,7 +843,16 @@
           return Scratch.fetch("https://api.ipify.org/")
           .then((r) => r.text())
           .catch(() => "");
-          }
+        }
+        WebExt_CurrentDomain(args, util) {
+          return window.location.hostname;
+        }
+        WebExt_CurrentPath(args, util) {
+          return window.location.pathname;
+        }
+        WebExt_CurrentProtocol(args, util) {
+          return window.location.protocol;
+        }
         WebExt_OpenWeb(args, util) {
             switch (args.TARGET) {
               case 'tab':
@@ -1138,6 +1237,24 @@
         }
         WebExt_isFocused(args, util) {
             return document.hasFocus();
+        }
+        WebExt_cookiesEnabled(_, util) {
+            return navigator.cookieEnabled;
+        }
+        WebExt_setControl({ OPTION }) {
+            ABCTenabled = Scratch.Cast.toBoolean(OPTION);
+        }
+        WebExt_getControl() {
+            return ABCTenabled;
+        }
+        WebExt_reloadpage(args, util) {
+            window.location.reload();
+        }
+        WebExt_goforward(args, util) {
+            window.history.forward();
+        }
+        WebExt_goback(args, util) {
+            window.history.back();
         }
         WebExt_closetab(args, util) {
             window.close();

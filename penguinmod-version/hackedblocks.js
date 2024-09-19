@@ -42,12 +42,12 @@ class HacksExtension {
           blockType: Scratch.BlockType.XML,
           filter: [Scratch.TargetType.SPRITE],
           xml: '<block type="motion_pointinrandomdirection"></block>'
-        },
+        },/*
         "---",
         {
           blockType: Scratch.BlockType.XML,
           xml: '<block type="sensing_loud"></block>'
-        },
+        },*/
         {
           blockType: "label",
           text: "Non Working Blocks",

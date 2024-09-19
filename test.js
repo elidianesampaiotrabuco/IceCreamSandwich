@@ -30,7 +30,7 @@
                         text: 'RGB',
                         blockType: Scratch.BlockType.REPORTER,
                         arguments: {},
-                        color1: '#ff0000', /* with my research, penguinmod has added a feature where your extension blocks can have custom colors indivitiully. */
+                        color1: '#ff0000', /* with my research, penguinmod has added a feature where your extension blocks can have custom colors individiully. */
                         color2: '#00ff00',
                         color3: '#0000ff'
                       },

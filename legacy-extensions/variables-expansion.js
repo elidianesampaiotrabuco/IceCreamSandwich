@@ -1,5 +1,6 @@
 (function (Scratch){
     'use strict';
+    const variables = {};
 
     class Extension {
         getInfo() {
@@ -24,7 +25,7 @@
             }
         }
         SetVarToVar(args, util){
-            
+            variables[args.var1] = args.var2
         }
     }
     Scratch.extensions.register(new Extension())
