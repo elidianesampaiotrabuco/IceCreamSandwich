@@ -21,11 +21,24 @@
                             }
                         }
                     },
+                    {
+                        opcode: "GetVar",
+                        text: "set [var1]",
+                        blockType: Scratch.BlockType.COMMAND,
+                        arguments: {
+                            var1: {
+                                type: Scratch.ArgumentType.STRING
+                            }
+                        }
+                    },
                 ]
             }
         }
         SetVarToVar(args, util){
             variables[args.var1] = args.var2
+        }
+        GetVar(args, util){
+            variables[args.var1]
         }
     }
     Scratch.extensions.register(new Extension())

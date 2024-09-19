@@ -252,7 +252,7 @@
                     opcode: 'WebExt_Favicon',
                     text: 'use [URL] as favicon',
                     blockType: Scratch.BlockType.COMMAND,
-                    hideFromPalette: (navigator.userAgent.includes('Safari')),
+                    hideFromPalette: IsSafari,
                     arguments: {
                         URL: {
                             type: Scratch.ArgumentType.STRING,
@@ -501,12 +501,12 @@
                         menu: 'WAKELOCK_MENU'
                       }
                     },
-                    hideFromPalette: (navigator.userAgent.includes('Firefox'))
+                    hideFromPalette: IsFireFox
                   },
                   {
                     opcode: 'WebExt_isWakeLock',
                     text: 'is wake lock enabled?',
-                    hideFromPalette: (navigator.userAgent.includes('Firefox')),
+                    hideFromPalette: IsFireFox,
                     blockType: Scratch.BlockType.BOOLEAN,
                     arguments: {}
                   },
@@ -517,7 +517,7 @@
                   {
                     opcode: 'WebExt_shareURL',
                     blockType: Scratch.BlockType.COMMAND,
-                    hideFromPalette: (navigator.userAgent.includes('Firefox')) || (navigator.userAgent.includes('Safari')),
+                    hideFromPalette: IsFireFox || IsSafari,
                     text: 'share URL [URL] with [TITLE] and message [MESSAGE]',
                     arguments: {
                       URL: {
@@ -538,7 +538,7 @@
                     opcode: 'WebExt_canShareURL',
                     text: 'can share URL?',
                     blockType: Scratch.BlockType.BOOLEAN,
-                    hideFromPalette: (navigator.userAgent.includes('Firefox')) || (navigator.userAgent.includes('Safari')),
+                    hideFromPalette: IsFireFox || IsSafari,
                     arguments: {}
                   },
                   {
