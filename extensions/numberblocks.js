@@ -85,20 +85,23 @@
                   blockType: Scratch.BlockType.BOOLEAN,
                   text: 'is numberblocks cringe?',
                   disableMonitor: true,
+                  hideFromPalette: true
                 },
                 {
                   opcode: 'numberblockinteger',
                   blockType: Scratch.BlockType.BOOLEAN,
                   text: 'is numberblocks ever gonna have non-integer numbers?',
                   disableMonitor: true,
+                  hideFromPalette: true
                 },
                 {
                   opcode: 'numberblockcom',
                   blockType: Scratch.BlockType.BOOLEAN,
                   text: 'does numberblocks have a nice community?',
                   disableMonitor: true,
+                  hideFromPalette: true
                 },
-                "---",
+                //"---",
                 {
                   opcode: 'numberblockoriginal',
                   blockType: Scratch.BlockType.REPORTER,
