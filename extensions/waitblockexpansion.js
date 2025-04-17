@@ -95,7 +95,7 @@
                 "---",
                 {
                   opcode: 'wait_funfact',
-                  text: 'fun fact about time',
+                  text: 'a rule about time',
                   disableMonitor: true,
                   blockType: Scratch.BlockType.REPORTER,
                 },
