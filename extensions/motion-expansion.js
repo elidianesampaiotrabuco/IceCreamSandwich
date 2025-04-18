@@ -1,4 +1,27 @@
-Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set my home":"setz mein zuhause","_set my home to x: [X] y: [Y]":"setz mein zuhause zur x: [X] y: [Y]","_go to home":"geh zuhause","_move [STEPS] steps towards x: [X] y: [Y]":"gehe [STEPS] er Schritt richtung zur x: [X] y: [Y]","_move [PERCENT]% of the way to x: [X] y: [Y]":"gehe [PERCENT]% auf der weg zur x: [X] y: [Y]","_manually fence":"Verhindern Sie, dass Figuren die Bühne verlassen","_rotation style":"Drehtyp"},"it":{"_Motion Expansion":"Espansione del moto","_set my home":"impostare la mia casa","_set my home to x: [X] y: [Y]":"imposta la mia casa su x: [X] y: [Y]","_go to home":"tornare a casa","_manually fence":"impedisci sprite fuori Stage","_move [PERCENT]% of the way to x: [X] y: [Y]":"percorri [PERCENT]% della distanza da x: [X] y: [Y]","_move [STEPS] steps towards x: [X] y: [Y]":"fai [STEPS] passi verso x: [X] y: [Y]","_rotation style":"stile rotazione","_touching rectangle x1: [X1] y1: [Y1] x2: [X2] y2: [Y2]?":"sta toccando rettangolo x1: [X1] y1: [Y1] x2: [X2] y2: [Y2]","_touching x: [X] y: [Y]?":"sta toccando x: [X] y: [Y]"}});
+Scratch.translate.setup({
+  "de":{
+    "_Motion Expansion":"Bewegungserweiterung",
+    "_set my home":"setze mein zuhause",
+    "_set my home to x: [X] y: [Y]":"setze mein zuhause zum x: [X] y: [Y]",
+    "_go to home":"geh zuhause",
+    "_move [STEPS] steps towards x: [X] y: [Y]":"gehe [STEPS] er Schritt richtung zur x: [X] y: [Y]",
+    "_move [PERCENT]% of the way to x: [X] y: [Y]":"gehe [PERCENT]% auf der weg zur x: [X] y: [Y]",
+    "_manually fence":"Verhindern Sie, dass Figuren die Bühne verlassen",
+    "_rotation style":"Drehtyp"
+  },
+  "it":{
+    "_Motion Expansion":"Espansione del moto",
+    "_set my home":"impostare la mia casa",
+    "_set my home to x: [X] y: [Y]":"imposta la mia casa su x: [X] y: [Y]",
+    "_go to home":"tornare a casa",
+    "_manually fence":"impedisci sprite fuori Stage",
+    "_move [PERCENT]% of the way to x: [X] y: [Y]":"percorri [PERCENT]% della distanza da x: [X] y: [Y]",
+    "_move [STEPS] steps towards x: [X] y: [Y]":"fai [STEPS] passi verso x: [X] y: [Y]",
+    "_rotation style":"stile rotazione",
+    "_touching rectangle x1: [X1] y1: [Y1] x2: [X2] y2: [Y2]?":"sta toccando rettangolo x1: [X1] y1: [Y1] x2: [X2] y2: [Y2]",
+    "_touching x: [X] y: [Y]?":"sta toccando x: [X] y: [Y]"
+  }
+});
 
 (function(Scratch) {
   'use strict';
@@ -6,6 +29,8 @@ Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set 
   if (!Scratch.extensions.unsandboxed) {
     throw new Error("this extension must be run unsandboxed");
   }
+
+  const variables = {};
 
   /**
    * @param {VM.BlockUtility} util
@@ -219,17 +244,21 @@ Scratch.translate.setup({"de":{"_Motion Expansion":"Bewegungserweiterung","_set 
       }
       motion_setmyHome(_, util){
         const target = util.target;
-        return localStorage.setItem('MOTION-EXPANSION' + 'X-POSITION', this._limitPrecision(target.x)),
-        localStorage.setItem('MOTION-EXPANSION' + 'Y-POSITION', this._limitPrecision(target.y))
+        variables["MOTION-EXPANSION-X-POSITION"] = this._limitPrecision(target.x)
+        variables["MOTION-EXPANSION-Y-POSITION"] = this._limitPrecision(target.y)
+        //return localStorage.setItem('MOTION-EXPANSION' + 'X-POSITION', this._limitPrecision(target.x)),
+        //localStorage.setItem('MOTION-EXPANSION' + 'Y-POSITION', this._limitPrecision(target.y))
       }
       motion_setmyHomeTo(args, util){
-        return localStorage.setItem('MOTION-EXPANSION' + 'X-POSITION', /*this._limitPrecision*/(args.X)),
-        localStorage.setItem('MOTION-EXPANSION' + 'Y-POSITION', /*this._limitPrecision*/(args.Y))
+        //return localStorage.setItem('MOTION-EXPANSION' + 'X-POSITION', /*this._limitPrecision*/(args.X)),
+        //localStorage.setItem('MOTION-EXPANSION' + 'Y-POSITION', /*this._limitPrecision*/(args.Y))
+        variables["MOTION-EXPANSION-X-POSITION"] = args.X
+        variables["MOTION-EXPANSION-Y-POSITION"] = args.Y
       }
       motion_gotoHome(_, util){
         const target = util.target;
-        let x = localStorage.getItem('MOTION-EXPANSION' + 'X-POSITION');
-        let y = localStorage.getItem('MOTION-EXPANSION' + 'Y-POSITION');
+        let x = variables["MOTION-EXPANSION-X-POSITION"]//localStorage.getItem('MOTION-EXPANSION' + 'X-POSITION');
+        let y = variables["MOTION-EXPANSION-Y-POSITION"]//localStorage.getItem('MOTION-EXPANSION' + 'Y-POSITION');
         return target.setXY(x, y);
       }
       motion_pointawayfrom(args, util) {
