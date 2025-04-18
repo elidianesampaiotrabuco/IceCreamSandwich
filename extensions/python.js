@@ -1,6 +1,11 @@
 (function(Scratch) {
     const variables = {};
     let pyodide = null;
+
+    if (!Scratch.extensions.unsandboxed) {
+        throw new Error("this extension must be run unsandboxed");
+    }
+
     class Extension {
         constructor() {
             this.loadPyodideOnce();
@@ -24,33 +29,60 @@
               name: "PYTHON",
               blocks: [
                 {
-                    opcode: 'PYTHON_runPython',
-                    text: 'run python [CODE]',
-                    blockType: Scratch.BlockType.COMMAND,
-                    arguments: {
-                      CODE: {
-                          type: Scratch.ArgumentType.STRING,
-                          defaultValue: `import js\njs.alert("Hello World!")`
-                      }
+                  opcode: 'PYTHON_runPython',
+                  text: 'run python [CODE]',
+                  blockType: Scratch.BlockType.COMMAND,
+                  arguments: {
+                    CODE: {
+                      type: Scratch.ArgumentType.STRING,
+                      defaultValue: `import js\njs.alert("Hello World!")`
                     }
-                  },
+                  }
+                },
                 {
                   opcode: 'PYTHON_runPython_Reporter',
                   text: 'run python [CODE]',
                   blockType: Scratch.BlockType.REPORTER,
                   arguments: {
                     CODE: {
-                        type: Scratch.ArgumentType.STRING,
-                        defaultValue: `def square(n):\n\treturn n * n\nsquare(7)`
+                      type: Scratch.ArgumentType.STRING,
+                      defaultValue: `def square(n):\n\treturn n * n\nsquare(7)`
+                    }
+                  }
+                },
+                {
+                  opcode: 'PYTHON_runPython_Boolean',
+                  text: 'run python [CODE]',
+                  blockType: Scratch.BlockType.BOOLEAN,
+                  arguments: {
+                    CODE: {
+                      type: Scratch.ArgumentType.STRING,
+                      defaultValue: `def is_even(n):\n\treturn n % 2 == 0\nis_even(10)`
                     }
                   }
                 },
               ]
             }
         }
+        async PYTHON_runPython(args) {
+            if (!pyodide) {
+                console.log("Pyodide isn't ready yet!");
+                return;
+            }
+        
+            try {
+                const cleanCode = args.CODE
+                    .replace(/\\n/g, '\n')
+                    .replace(/\\t/g, '\t');
+                await pyodide.runPythonAsync(cleanCode);
+            } catch (e) {
+                console.error("Python error:", e);
+                throw new Error(e);
+            }
+        }
         async PYTHON_runPython_Reporter(args) {
             if (!pyodide) {
-                console.log("Pyodide not ready yet!");
+                console.log("Pyodide isn't ready yet!");
                 return;
             }
         
@@ -64,11 +96,12 @@
                 return result
             } catch (e) {
                 console.error("Python error:", e);
+                throw new Error(e);
             }
         }
-        async PYTHON_runPython(args) {
+        async PYTHON_runPython_Boolean(args) {
             if (!pyodide) {
-                console.log("Pyodide not ready yet!");
+                console.log("Pyodide isn't ready yet!");
                 return;
             }
         
@@ -77,9 +110,12 @@
                     .replace(/\\n/g, '\n')
                     .replace(/\\t/g, '\t');
         
-                await pyodide.runPythonAsync(cleanCode);
+                const result = await pyodide.runPythonAsync(cleanCode);
+                console.log("Python returned:", result);
+                return Boolean(result)
             } catch (e) {
                 console.error("Python error:", e);
+                throw new Error(e);
             }
         }
     }

@@ -5,6 +5,10 @@ This extension is inspired by Gen1x's CATS Extension
     const prefix = "DOGS_"
     const variables = {};
 
+    if (!Scratch.extensions.unsandboxed) {
+      throw new Error("this extension must be run unsandboxed");
+    }
+
     let dogBreeds = [
       'Beagle',
       'Border Collie',
