@@ -26,7 +26,7 @@
         getInfo() {
             return {
               id: "PYTHON",
-              name: "PYTHON",
+              name: "Python (Pyodide)",
               blocks: [
                 {
                   opcode: 'PYTHON_runPython',
