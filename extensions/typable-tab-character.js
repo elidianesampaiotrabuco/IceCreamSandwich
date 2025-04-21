@@ -3,6 +3,8 @@
 
     //variables["isTabTypable"] = false
 
+    let listenerAdded = false
+
     function handleKeyDown(event) {
       if (event.key === 'Tab') {
         event.preventDefault();
@@ -20,11 +22,17 @@
     }
 
     function addEventForKeydown() {
-      document.addEventListener('keydown', handleKeyDown, true);
+      if (!listenerAdded) {
+        document.addEventListener('keydown', handleKeyDown, true);
+        listenerAdded = true
+      }
     }
 
     function removeEventForKeydown() {
-      document.removeEventListener('keydown', handleKeyDown, true);
+      if (listenerAdded) {
+        document.removeEventListener('keydown', handleKeyDown, true);
+        listenerAdded = false
+      }
     }
 
     class Extension {
