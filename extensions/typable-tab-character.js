@@ -1,13 +1,15 @@
 (function(Scratch) {
     const variables = {};
 
-    //variables["isTabTypable"] = false
+    variables["isTabPressed?"] = false
 
     let listenerAdded = false
 
     function handleKeyDown(event) {
       if (event.key === 'Tab') {
         event.preventDefault();
+
+        variables["isTabPressed?"] = true
   
         const textarea = document.activeElement;
         if (textarea && (textarea.tagName === 'TEXTAREA' || textarea.tagName === 'INPUT')) {
@@ -21,9 +23,16 @@
       }
     }
 
+    function handleKeyUp(event) {
+      if (event.key === 'Tab') {
+        variables["isTabPressed?"] = false
+      }
+    }
+
     function addEventForKeydown() {
       if (!listenerAdded) {
         document.addEventListener('keydown', handleKeyDown, true);
+        document.addEventListener('keyup', handleKeyUp, true);
         listenerAdded = true
       }
     }
@@ -31,6 +40,7 @@
     function removeEventForKeydown() {
       if (listenerAdded) {
         document.removeEventListener('keydown', handleKeyDown, true);
+        document.removeEventListener('keyup', handleKeyUp, true);
         listenerAdded = false
       }
     }
@@ -57,7 +67,13 @@
                   text: 'when tab key pressed',
                   blockType: Scratch.BlockType.HAT,
                   arguments: {}
-                }*/,
+                },*/
+                {
+                  opcode: 'tab_tabKeypressed',
+                  text: 'is tab key pressed',
+                  blockType: Scratch.BlockType.BOOLEAN,
+                  arguments: {}
+                },
               ],
               menus: {
                 ENABLE_MENU: {
@@ -83,6 +99,12 @@
             } else {
               removeEventForKeydown()
             }
+        }
+        /*tab_whentabKeypressed(_, util) {
+          return variables["isTabPressed?"]
+        }*/
+        tab_tabKeypressed(_, util) {
+          return variables["isTabPressed?"]
         }
     }
 
