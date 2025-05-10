@@ -241,35 +241,35 @@
         switch (args.MATHMENU) {
           case 'plus':
             return new Promise((resolve, reject) => {
-              const timeInMilliseconds = (args.input1 * 1000) + (args.input2 * 1000);
+              const timeInMilliseconds = (args.input1 + args.input2) * 1000;
               setTimeout(() => {
                 resolve();
               }, timeInMilliseconds);
             });
           case 'minus':
             return new Promise((resolve, reject) => {
-              const timeInMilliseconds = (args.input1 * 1000) - (args.input2 * 1000);
+              const timeInMilliseconds = (args.input1 - args.input2) * 1000;
               setTimeout(() => {
                 resolve();
               }, timeInMilliseconds);
             });
           case 'times':
             return new Promise((resolve, reject) => {
-              const timeInMilliseconds = (args.input1 * 1000) * (args.input2 * 1000);
+              const timeInMilliseconds = (args.input1 * args.input2) * 1000;
               setTimeout(() => {
                 resolve();
               }, timeInMilliseconds);
             });
           case 'divided by':
             return new Promise((resolve, reject) => {
-              const timeInMilliseconds = (args.input1 * 1000) / (args.input2 * 1000);
+              const timeInMilliseconds = (args.input1 / args.input2) * 1000;
               setTimeout(() => {
                 resolve();
               }, timeInMilliseconds);
             });
           case 'to the power of':
             return new Promise((resolve, reject) => {
-              const timeInMilliseconds = (args.input1 * 1000) ** (args.input2 * 1000);
+              const timeInMilliseconds = (args.input1 ** args.input2) * 1000;
               setTimeout(() => {
                 resolve();
               }, timeInMilliseconds);
