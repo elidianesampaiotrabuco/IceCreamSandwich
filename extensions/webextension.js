@@ -42,8 +42,8 @@
       }
     });
 
-    const IsFireFox = (navigator.userAgent.includes('Firefox'))
-    const IsSafari = (navigator.userAgent.includes('Safari'))
+    const IsFireFox = (navigator.userAgent.includes('Firefox')) ? true : null
+    const IsSafari = (navigator.userAgent.includes('Safari')) ? true : null
 
     class Extension {
       constructor(runtime) {
@@ -501,12 +501,12 @@
                         menu: 'WAKELOCK_MENU'
                       }
                     },
-                    hideFromPalette: IsFireFox
+                    hideFromPalette: IsFireFox || false
                   },
                   {
                     opcode: 'WebExt_isWakeLock',
                     text: 'is wake lock enabled?',
-                    hideFromPalette: IsFireFox,
+                    hideFromPalette: IsFireFox || false,
                     blockType: Scratch.BlockType.BOOLEAN,
                     arguments: {}
                   },
@@ -517,7 +517,7 @@
                   {
                     opcode: 'WebExt_shareURL',
                     blockType: Scratch.BlockType.COMMAND,
-                    hideFromPalette: IsFireFox || IsSafari,
+                    hideFromPalette: IsFireFox || IsSafari || false,
                     text: 'share URL [URL] with [TITLE] and message [MESSAGE]',
                     arguments: {
                       URL: {
@@ -538,7 +538,7 @@
                     opcode: 'WebExt_canShareURL',
                     text: 'can share URL?',
                     blockType: Scratch.BlockType.BOOLEAN,
-                    hideFromPalette: IsFireFox || IsSafari,
+                    hideFromPalette: IsFireFox || IsSafari || false,
                     arguments: {}
                   },
                   {
