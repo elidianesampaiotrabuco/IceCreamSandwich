@@ -7,166 +7,135 @@
     let L = null;
 
     if (!Scratch.extensions.unsandboxed) {
-        throw new Error("this extension must be run unsandboxed");
+        throw new Error("This extension must be run unsandboxed.");
     }
 
     class Extension {
         constructor() {
-            this.loadPyodideOnce();
+            this.ready = this.loadFengari();
         }
 
-        async loadPyodideOnce() {
-            const script = document.createElement("script");
-            script.src = "https://cdn.jsdelivr.net/npm/fengari-web@0.1.4/dist/fengari-web.js";
-
-            script.onload = async () => {
-                console.log("Fengari script loaded!");
-                fengari = window.fengari;
-                lua = fengari.lua;
-                lauxlib = fengari.lauxlib;
-                lualib = fengari.lualib;
-                L = lua.luaL_newstate();
-                lualib.luaL_openlibs(L);
-                console.log("Fengari is ready!");
-            };
-
-            document.head.appendChild(script);
+        async loadFengari() {
+            return new Promise((resolve) => {
+                const script = document.createElement("script");
+                script.src = "https://cdn.jsdelivr.net/npm/fengari-web@0.1.4/dist/fengari-web.js";
+                script.onload = () => {
+                    fengari = window.fengari;
+                    lua = fengari.lua;
+                    lauxlib = fengari.lauxlib;
+                    lualib = fengari.lualib;
+                    L = fengari.L; // use the default Lua state
+                    resolve();
+                };
+                document.head.appendChild(script);
+            });
         }
+
         getInfo() {
             return {
-              id: "LUA",
-              name: "Lua (Fengari)",
-              blocks: [
-                {
-                  opcode: 'runLua',
-                  text: 'run lua code [CODE]',
-                  blockType: Scratch.BlockType.COMMAND,
-                  arguments: {
-                    CODE: {
-                      type: Scratch.ArgumentType.STRING,
-                      defaultValue: `print("Hello World!")`
-                    }
-                  }
-                },
-                {
-                  opcode: 'runLua_Reporter',
-                  text: 'run lua code [CODE]',
-                  blockType: Scratch.BlockType.REPORTER,
-                  arguments: {
-                    CODE: {
-                      type: Scratch.ArgumentType.STRING,
-                      defaultValue: `return (2 + 2)`
-                    }
-                  }
-                },
-                {
-                  opcode: 'runLua_Boolean',
-                  text: 'run lua code [CODE]',
-                  blockType: Scratch.BlockType.BOOLEAN,
-                  arguments: {
-                    CODE: {
-                      type: Scratch.ArgumentType.STRING,
-                      defaultValue: `return (3 > 2)`
-                    }
-                  }
-                },
-              ]
-            }
+                id: "LUA",
+                name: "Lua (Fengari)",
+                blocks: [
+                    {
+                        opcode: "runLua",
+                        blockType: Scratch.BlockType.COMMAND,
+                        text: "run lua code [CODE]",
+                        arguments: {
+                            CODE: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: `print("Hello World!")`,
+                            },
+                        },
+                    },
+                    {
+                        opcode: "runLua_Reporter",
+                        blockType: Scratch.BlockType.REPORTER,
+                        text: "run lua code [CODE]",
+                        arguments: {
+                            CODE: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: `return (2 + 2)`,
+                            },
+                        },
+                    },
+                    {
+                        opcode: "runLua_Boolean",
+                        blockType: Scratch.BlockType.BOOLEAN,
+                        text: "run lua code [CODE]",
+                        arguments: {
+                            CODE: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: `return (3 > 2)`,
+                            },
+                        },
+                    },
+                ],
+            };
         }
-        async checkForFengari() {
-            if (!fengari) {
-                console.log("Fengari isn't ready yet!");
-                return;
-            }
-        }
+
         async runLua(args) {
-            try {
-                this.runLuaCode(args.CODE);
-            } catch (e) {
-                console.error("Lua error:", e);
-                throw new Error(e);
-            }
-        }
-        async runLuaCode(code) {
-            await this.checkForFengari();
-        
-            const luaCode = code.replace(/\\n/g, "\n").replace(/\\t/g, "\t");
-
-            const status = lauxlib.luaL_loadstring(L, fengari.to_luastring(luaCode));
-
-            if (status !== lua.LUA_OK) {
-                const msg = fengari.to_jsstring(lua.lua_tostring(L, -1));
-                lua.lua_pop(L, 1);
-                throw new Error("Lua syntax error: " + msg);
-            }
-
-            const result = lua.lua_pcall(L, 0, lua.LUA_MULTRET, 0);
-            if (result !== lua.LUA_OK) {
-                const msg = fengari.to_jsstring(lua.lua_tostring(L, -1));
-                lua.lua_pop(L, 1);
-                throw new Error("Lua runtime error: " + msg);
-            }
-        }
-        async runLua_Reporter(args) {
-            await this.checkForFengari();
-        
+            await this.ready;
             try {
                 const code = args.CODE.replace(/\\n/g, "\n").replace(/\\t/g, "\t");
+                const status = lauxlib.luaL_loadstring(L, fengari.to_luastring(code));
+                if (status !== lua.LUA_OK) {
+                    throw new Error(fengari.to_jsstring(lua.lua_tostring(L, -1)));
+                }
+                lua.lua_pcall(L, 0, 0, 0);
+            } catch (e) {
+                console.error("Lua Error:", e);
+            }
+        }
 
-                const wrappedCode = `
+        async runLua_Reporter(args) {
+            await this.ready;
+            try {
+                const code = `
                     function __scratch_return()
-                        ${code}
+                        ${args.CODE}
                     end
                 `;
-
-                lauxlib.luaL_loadstring(L, fengari.to_luastring(wrappedCode));
+                lauxlib.luaL_loadstring(L, fengari.to_luastring(code));
                 lua.lua_pcall(L, 0, 0, 0);
-
                 lua.lua_getglobal(L, fengari.to_luastring("__scratch_return"));
                 lua.lua_pcall(L, 0, 1, 0);
 
-                let retVal;
-                if (lua.lua_isstring(L, -1)) {
+                const val = lua.lua_type(L, -1);
+                let retVal = "";
+
+                if (val === lua.LUA_TSTRING) {
                     retVal = fengari.to_jsstring(lua.lua_tostring(L, -1));
-                } else if (lua.lua_isnumber(L, -1)) {
+                } else if (val === lua.LUA_TNUMBER) {
                     retVal = lua.lua_tonumber(L, -1);
-                } else if (lua.lua_isboolean(L, -1)) {
+                } else if (val === lua.LUA_TBOOLEAN) {
                     retVal = lua.lua_toboolean(L, -1);
-                } else if (lua.lua_isnil(L, -1)) {
-                    retVal = "";
-                } else {
-                    retVal = "[Lua value]";
                 }
 
                 lua.lua_pop(L, 1);
                 return retVal;
             } catch (e) {
-                console.error(e);
+                console.error("Lua Error:", e);
                 return "";
             }
         }
+
         async runLua_Boolean(args) {
-            await this.checkForFengari();
-        
+            await this.ready;
             try {
-                const code = args.CODE.replace(/\\n/g, "\n").replace(/\\t/g, "\t");
-                const wrappedCode = `
+                const code = `
                     function __scratch_return()
-                        ${code}
+                        ${args.CODE}
                     end
                 `;
-
-                lauxlib.luaL_loadstring(L, fengari.to_luastring(wrappedCode));
+                lauxlib.luaL_loadstring(L, fengari.to_luastring(code));
                 lua.lua_pcall(L, 0, 0, 0);
-
                 lua.lua_getglobal(L, fengari.to_luastring("__scratch_return"));
                 lua.lua_pcall(L, 0, 1, 0);
-
-                const val = lua.lua_toboolean(L, -1);
+                const result = lua.lua_toboolean(L, -1);
                 lua.lua_pop(L, 1);
-                return val;
+                return result;
             } catch (e) {
-                console.error(e);
+                console.error("Lua Error:", e);
                 return false;
             }
         }
