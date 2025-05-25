@@ -137,6 +137,45 @@ class HacksExtension {
           </value>
       </block>`,
         },
+        {
+          blockType: "label",
+          text: "Unknown Blocks",
+        },
+        {
+          blockType: Scratch.BlockType.XML,
+          xml: `<block type="motion_glidedirectionstepsinseconds">
+            <value name="STEPS">
+              <shadow type="math_number">
+                <field name="NUM">10</field>
+              </shadow>
+            </value>
+            <value name="SECS">
+              <shadow type="math_number">
+                <field name="NUM">1</field>
+              </shadow>
+            </value>
+          </block>`,
+        },
+        {
+          blockType: Scratch.BlockType.XML,
+          xml: `<block type="sound_pause">
+                  <value name="SOUND_MENU">
+                    <shadow type="sound_sounds_menu"></shadow>
+                  </value>
+                </block>`,
+        },
+        {
+          blockType: Scratch.BlockType.XML,
+          xml: `<block type="sound_pauseallsounds" />`,
+        },
+        {
+          blockType: Scratch.BlockType.XML,
+          xml: `<block type="sound_getTimePosition">
+                  <value name="SOUND_MENU">
+                    <shadow type="sound_sounds_menu"></shadow>
+                  </value>
+                </block>`,
+        },
       ]
     };
   }
