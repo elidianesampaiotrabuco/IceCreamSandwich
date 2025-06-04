@@ -176,6 +176,14 @@ class HacksExtension {
                   </value>
                 </block>`,
         },
+        {
+          blockType: Scratch.BlockType.XML,
+          xml: `<block type="sound_getSoundVolume">
+                  <value name="SOUND_MENU">Add commentMore actions
+                    <shadow type="sound_sounds_menu"></shadow>
+                  </value>
+                </block>`,
+        },
       ]
     };
   }
