@@ -150,24 +150,6 @@
     return compileVars.new()
   }
 
-  function setDefaultTimerSelection() {
-  const firstTimer = newTimers[0]?.name;
-  if (!firstTimer) return;
-
-  Scratch.vm.runtime.targets.forEach(target => {
-    const blocks = target.blocks?._blocks;
-    if (!blocks) return;
-
-    Object.values(blocks).forEach(block => {
-      const field = block.fields?.timersMenu;
-      if (field && field[0] !== firstTimer) {
-        block.setFieldValue(firstTimer, "timersMenu");
-      }
-    });
-  });
-}
-
-
   class Extension {
     constructor(vm) {
       this.vm = vm;
@@ -191,7 +173,10 @@
       window.requestAnimationFrame(update);
     }
     getExistingTimers() {
-      if (!newTimers.length) return [{ text: "No timers", value: "No timers" }];
+      if (!newTimers.length) return [
+        { text: "No timers", value: "No timers" },
+        { text: "Create new timer", value: () => this.createnewtimer() }
+      ];
       return newTimers.map(timer => ({
         text: timer.name,
         value: timer.name
@@ -266,6 +251,22 @@
             }
           },
           {
+            opcode: 'setcustomtimers',
+            text: 'set timer [TIMERS] to [VALUE]',
+            blockType: Scratch.BlockType.COMMAND,
+            hideFromPalette: true,
+            arguments: {
+              TIMERS: {
+                type: Scratch.ArgumentType.STRING,
+                menu: "timersMenu",
+              },
+              VALUE: {
+                type: Scratch.ArgumentType.NUMBER,
+                defaultValue: "0"
+              },
+            }
+          },
+          {
             opcode: 'pausecustomtimers',
             text: 'pause timer [TIMERS]',
             blockType: Scratch.BlockType.COMMAND,
@@ -336,7 +337,8 @@
         "key": key
       });
 
-      this.runtime.emit("BLOCKSINFO_UPDATE", this.runtime);
+      // this.runtime.emit("BLOCKSINFO_UPDATE", this.runtime);
+      this.refreshToolbox();
     }
     deletenewtimer() {
       const timerName = prompt("Delete existing timer");
@@ -345,6 +347,8 @@
       if (index == -1) return alert("Timer does not exist.");
 
       newTimers.splice(index, 1);
+
+      this.refreshToolbox();
     }
     getcustomtimers(args) {
       const timer = newTimers.find(t => t["name"] === args.TIMERS);
@@ -369,6 +373,23 @@
     pausedcustomtimer(args) {
       const timer = newTimers.find(t => t["name"] === args.TIMERS);
       return timer ? timer.paused : false;
+    }
+    setcustomtimers(args) {
+      const timer = newTimers.find(t => t["name"] === args.TIMERS);
+      const timerInstance = variables[timer.key];
+      if (timerInstance) {
+        
+      }
+      timer.value = args.VALUE;
+    }
+
+    refreshToolbox() {
+      if (window.Blockly) {
+        const Blockly = window.Blockly;
+        const workspace = Blockly.getMainWorkspace()
+        const toolboxXml = workspace.options.languageTree.cloneNode(true);
+        workspace.updateToolbox(toolboxXml);
+      }
     }
   }
 

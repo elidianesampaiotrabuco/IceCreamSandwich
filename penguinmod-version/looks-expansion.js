@@ -127,7 +127,7 @@ class LooksExtension {
           opcode: 'showAllsprites',
           text: 'show all sprites',
           blockType: Scratch.BlockType.COMMAND,
-          hideFromPalette: true,
+          // hideFromPalette: true,
           // filter: [Scratch.TargetType.SPRITE],
           arguments: {}
         },
@@ -135,7 +135,7 @@ class LooksExtension {
           opcode: 'hideAllsprites',
           text: 'hide all sprites',
           blockType: Scratch.BlockType.COMMAND,
-          hideFromPalette: true,
+          // hideFromPalette: true,
           // filter: [Scratch.TargetType.SPRITE],
           arguments: {}
         },
@@ -388,6 +388,21 @@ class LooksExtension {
             },
           },
         },
+        {
+          opcode: "switchCostumeDif2",
+          blockType: Scratch.BlockType.COMMAND,
+          text: "switch costume of [TARGET] to [COSTUME]",
+          arguments: {
+            TARGET: {
+              type: Scratch.ArgumentType.STRING,
+              menu: "spriteMenu",
+            },
+            COSTUME: {
+              type: Scratch.ArgumentType.STRING,
+              defaultValue: "costume1",
+            },
+          },
+        },
       ],
       menus: {
         spriteMenu: {
@@ -577,20 +592,32 @@ class LooksExtension {
     }, duration)
   }
   showAllsprites (args, util) {
-    alert(
+    /*alert(
       `This block is non-functional, it does not do anything other than executing this alert.
 
       this block is work in progress.
       `
-    )
+    )*/
+    const targets = Scratch.vm.runtime.targets;
+    for (const target of targets) {
+      if (!target.isStage) {
+        target.setVisible(true)
+      }
+    }
   }
   hideAllsprites (args, util) {
-    alert(
+    /*alert(
       `This block is non-functional, it does not do anything other than executing this alert.
 
       this block is work in progress.
       `
-    )
+    )*/
+    const targets = Scratch.vm.runtime.targets;
+    for (const target of targets) {
+      if (!target.isStage) {
+        target.setVisible(false)
+      }
+    }
   }
   randomHex (_, util) {
     const originalArray = [
@@ -844,6 +871,10 @@ class LooksExtension {
       } else {
 
       }
+    }
+    switchCostumeDif2(args, util) {
+      const target = getSpriteTargetByName(util, args.TARGET);
+      target.setCostume(this.getCostumeInput(args.COSTUME, target));
     }
     // copied from https://extensions.turbowarp.org/Lily/LooksPlus.js
     getCostumeInput(costume, target) {
