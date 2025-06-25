@@ -386,7 +386,7 @@
     refreshToolbox() {
       if (window.Blockly) {
         const Blockly = window.Blockly;
-        const workspace = Blockly.getMainWorkspace()
+        const workspace = Blockly.getMainWorkspace();
         const toolboxXml = workspace.options.languageTree.cloneNode(true);
         workspace.updateToolbox(toolboxXml);
       }

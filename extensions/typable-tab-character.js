@@ -2,14 +2,20 @@
     const variables = {};
 
     variables["isTabPressed?"] = false
+    variables["isTabPressed_TEMP?"] = false
+    variables["isTabPressed_TEMP_WaitUntil?"] = false
 
     let listenerAdded = false
 
     function handleKeyDown(event) {
       if (event.key === 'Tab') {
         event.preventDefault();
+        Scratch.vm.runtime.startHats(`${Extension.prototype.getInfo().id}_tab_whentabKeypressed`)
 
         variables["isTabPressed?"] = true
+        if (variables["isTabPressed_TEMP_WaitUntil?"] !== true) {
+          runKeyPressedTemp()
+        }
   
         const textarea = document.activeElement;
         if (textarea && (textarea.tagName === 'TEXTAREA' || textarea.tagName === 'INPUT')) {
@@ -26,6 +32,7 @@
     function handleKeyUp(event) {
       if (event.key === 'Tab') {
         variables["isTabPressed?"] = false
+        variables["isTabPressed_TEMP_WaitUntil?"] = false
       }
     }
 
@@ -45,6 +52,13 @@
       }
     }
 
+    async function runKeyPressedTemp() {
+      variables["isTabPressed_TEMP_WaitUntil?"] = true
+      variables["isTabPressed_TEMP?"] = true
+      await new Promise(resolve => setTimeout(resolve, 100));
+      variables["isTabPressed_TEMP?"] = false
+    }
+
     class Extension {
         getInfo() {
             return {
@@ -62,15 +76,27 @@
                     }
                   }
                 },
-                /*{
+                {
                   opcode: 'tab_whentabKeypressed',
                   text: 'when tab key pressed',
                   blockType: Scratch.BlockType.HAT,
                   arguments: {}
-                },*/
+                },
+                {
+                  opcode: 'tab_whentabKeyhit',
+                  text: 'when tab key hit',
+                  blockType: Scratch.BlockType.HAT,
+                  arguments: {}
+                },
                 {
                   opcode: 'tab_tabKeypressed',
-                  text: 'is tab key pressed',
+                  text: 'tab key pressed?',
+                  blockType: Scratch.BlockType.BOOLEAN,
+                  arguments: {}
+                },
+                {
+                  opcode: 'tab_tabKeyhit',
+                  text: 'tab key hit?',
                   blockType: Scratch.BlockType.BOOLEAN,
                   arguments: {}
                 },
@@ -100,11 +126,17 @@
               removeEventForKeydown()
             }
         }
-        /*tab_whentabKeypressed(_, util) {
+        tab_whentabKeypressed(_, util) {
           return variables["isTabPressed?"]
-        }*/
+        }
+        tab_whentabKeyhit(_, util) {
+          return variables["isTabPressed?"]
+        }
         tab_tabKeypressed(_, util) {
           return variables["isTabPressed?"]
+        }
+        tab_tabKeyhit(_, util) {
+          return variables["isTabPressed_TEMP?"]
         }
     }
 
