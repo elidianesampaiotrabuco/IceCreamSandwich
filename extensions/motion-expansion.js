@@ -1,9 +1,11 @@
 Scratch.translate.setup({
   "de":{
+    "_there's no home":"Es gibt keine Zuhause",
     "_Motion Expansion":"Bewegungserweiterung",
     "_set my home":"setze mein zuhause",
-    "_set my home to x: [X] y: [Y]":"setze mein zuhause zum x: [X] y: [Y]",
-    "_go to home":"geh zuhause",
+    "_set my home to x: [X] y: [Y]":"setze mein Zuhause zum x: [X] y: [Y]",
+    "_go to home":"geh Zuhause",
+    "_home [POSITION]":"[POSITION] von Zuhause",
     "_move [STEPS] steps towards x: [X] y: [Y]":"gehe [STEPS] er Schritt richtung zur x: [X] y: [Y]",
     "_move [PERCENT]% of the way to x: [X] y: [Y]":"gehe [PERCENT]% auf der weg zur x: [X] y: [Y]",
     "_manually fence":"Verhindern Sie, dass Figuren die Bühne verlassen",
@@ -68,6 +70,27 @@ Scratch.translate.setup({
                     : "Stage selected: no motion blocks",
               },
               {
+                opcode: `motion_diagonalmovesteps`,
+                blockType: Scratch.BlockType.COMMAND,
+                filter: [Scratch.TargetType.SPRITE],
+                text: "move [TOPBOTTOM] [LEFTRIGHT] [STEPS] steps",
+                arguments: {
+                  TOPBOTTOM: {
+                    type: Scratch.ArgumentType.STRING,
+                    menu: 'TopBottomMenu'
+                  },
+                  LEFTRIGHT: {
+                    type: Scratch.ArgumentType.STRING,
+                    menu: 'LeftRightMenu'
+                  },
+                  STEPS: {
+                    type: Scratch.ArgumentType.NUMBER,
+                    defaultValue: '10'
+                  },
+                }
+              },
+              "---",
+              {
                 opcode: `motion_setmyHome`,
                 blockType: Scratch.BlockType.COMMAND,
                 filter: [Scratch.TargetType.SPRITE],
@@ -98,10 +121,22 @@ Scratch.translate.setup({
                 arguments: {}
               },
               {
+                opcode: `motion_getHome`,
+                filter: [Scratch.TargetType.SPRITE],
+                blockType: Scratch.BlockType.REPORTER,
+                text: Scratch.translate('home [POSITION]'),
+                arguments: {
+                  POSITION: {
+                    type: Scratch.ArgumentType.STRING,
+                    menu: 'PositionMenu'
+                  }
+                }
+              },
+              "---",
+              {
                 opcode: `motion_pointawayfrom`,
                 filter: [Scratch.TargetType.SPRITE],
                 blockType: Scratch.BlockType.COMMAND,
-                hideFromPalette: true,
                 text: 'point away from [AWAYFROM]',
                 arguments: {
                   AWAYFROM: {
@@ -237,7 +272,19 @@ Scratch.translate.setup({
             menus: {
               SpritesMenu: {
                 acceptReporters: true,
-                items: [{ text: "mouse-pointer", value: "_mouse_" },'this menu is work in progress.']
+                items: "_getTargets"//[{ text: "mouse-pointer", value: "_mouse_" },'this menu is work in progress.']
+              },
+              PositionMenu: {
+                acceptReporters: true,
+                items: ['X', 'Y']
+              },
+              TopBottomMenu: {
+                acceptReporters: false,
+                items: ['top', 'bottom']
+              },
+              LeftRightMenu: {
+                acceptReporters: false,
+                items: ['left', 'right']
               }
             },
           }
@@ -260,6 +307,13 @@ Scratch.translate.setup({
         let x = variables["MOTION-EXPANSION-X-POSITION"]//localStorage.getItem('MOTION-EXPANSION' + 'X-POSITION');
         let y = variables["MOTION-EXPANSION-Y-POSITION"]//localStorage.getItem('MOTION-EXPANSION' + 'Y-POSITION');
         return target.setXY(x, y);
+      }
+      motion_getHome(args, util) {
+        if (Scratch.Cast.toString(args.POSITION) === 'X') {
+          return variables["MOTION-EXPANSION-X-POSITION"] ?? Scratch.translate("there's no home");
+        } else if (Scratch.Cast.toString(args.POSITION) === 'Y') {
+          return variables["MOTION-EXPANSION-Y-POSITION"] ?? Scratch.translate("there's no home");
+        }
       }
       motion_pointawayfrom(args, util) {
         let targetX = 0;
@@ -387,8 +441,33 @@ Scratch.translate.setup({
       motion_rotationStyle(args, util) {
         return util.target.rotationStyle;
       }
+      motion_diagonalmovesteps(args, util) { // terribly coded but if it works, it works
+        switch (args.LEFTRIGHT) {
+          case 'left':
+            this._moveSteps(args.STEPS * -1, util);
+            break;
+          case 'right':
+            this._moveSteps(args.STEPS, util);
+            break;
+        }
+        switch (args.TOPBOTTOM) {
+          case 'top':
+            util.target.setDirection(util.target.direction + 90);
+            this._moveSteps(args.STEPS * -1, util);
+            util.target.setDirection(util.target.direction - 90);
+            break;
+          case 'bottom':
+            util.target.setDirection(util.target.direction + -90)
+            this._moveSteps(args.STEPS * -1, util);
+            util.target.setDirection(util.target.direction + 90);
+            break;
+        }
+      }
       _radToDeg (rad) {
         return rad * 180 / Math.PI;
+      }
+      _degToRad (deg) {
+        return deg * Math.PI / 180;
       }
       _getTargets() {
         let spriteNames = [
@@ -398,6 +477,9 @@ Scratch.translate.setup({
           .filter((target) => target.isOriginal && !target.isStage)
           .map((target) => target.getName());
         spriteNames = spriteNames.concat(targets);
+
+        const myself = Scratch.vm.runtime.getEditingTarget().getName();
+        spriteNames.splice(spriteNames.indexOf(myself), 1);
         return spriteNames;
       }
       _getSprites() {
@@ -424,6 +506,12 @@ Scratch.translate.setup({
         const delta = coordinate - rounded;
         const limitedCoord = (Math.abs(delta) < 1e-9) ? rounded : coordinate;
         return limitedCoord;
+      }
+      _moveSteps(steps, util) {
+        const radians = this._degToRad(90 - util.target.direction);
+        const dx = steps * Math.cos(radians);
+        const dy = steps * Math.sin(radians);
+        util.target.setXY(util.target.x + dx, util.target.y + dy);
       }
   }
   
