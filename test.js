@@ -53,7 +53,31 @@
                             }
                         },
                       },
-                ]
+                      {
+                        opcode: 'typableMenu',
+                        text: 'typable menu [TYPING]',
+                        blockType: Scratch.BlockType.COMMAND,
+                        arguments: {
+                            TYPING: {
+                                type: Scratch.ArgumentType.STRING,
+                                defaultValue: "Hello",
+                                menu: "THIS"
+                            }
+                        },
+                      },
+                ],
+                menus: {
+                    THIS: {
+                        items: [
+                            "Dave",
+                            "The",
+                            "Magical",
+                            "Cheese",
+                            "Wizard"
+                        ],
+                        isTypeable: true
+                    }
+                }
             }
         }
         showAllsprites(args, util) {
