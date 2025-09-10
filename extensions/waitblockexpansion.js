@@ -29,7 +29,9 @@
   let MATHMENU = [
     'plus',
     'minus',
-    'times'
+    'times',
+    'divided by',
+    'to the power of'
   ];
 
   class Extension {
@@ -95,7 +97,7 @@
                 "---",
                 {
                   opcode: 'wait_funfact',
-                  text: 'fun fact about time',
+                  text: 'a rule about time',
                   disableMonitor: true,
                   blockType: Scratch.BlockType.REPORTER,
                 },
@@ -108,6 +110,7 @@
                   opcode: 'wait_divided',
                   text: 'wait [INPUT1] seconds divided by [INPUT2]',
                   blockType: Scratch.BlockType.COMMAND,
+                  hideFromPalette: true,
                   arguments: {
                     INPUT1: {
                       type: Scratch.ArgumentType.NUMBER,
@@ -235,28 +238,50 @@
         });
       }
       wait_math (args) {
-        if ((args.MATHMENU) === 'plus') {
-        return new Promise((resolve, reject) => {
-          const timeInMilliseconds = (args.input1 * 1000) + (args.input2 * 1000);
-          setTimeout(() => {
-            resolve();
-          }, timeInMilliseconds);
-        });
-      } else if ((args.MATHMENU) === 'minus') {
-        return new Promise((resolve, reject) => {
-          const timeInMilliseconds = (args.input1 * 1000) - (args.input2 * 1000);
-          setTimeout(() => {
-            resolve();
-          }, timeInMilliseconds);
-        });
-      } else if ((args.MATHMENU) === 'times') {
-        return new Promise((resolve, reject) => {
-          const timeInMilliseconds = (args.input1 * 1000) * args.input2;
-          setTimeout(() => {
-            resolve();
-          }, timeInMilliseconds);
-        });
-      }
+        switch (args.MATHMENU) {
+          case 'plus':
+            return new Promise((resolve, reject) => {
+              const timeInMilliseconds = (args.input1 + args.input2) * 1000;
+              setTimeout(() => {
+                resolve();
+              }, timeInMilliseconds);
+            });
+          case 'minus':
+            return new Promise((resolve, reject) => {
+              const timeInMilliseconds = (args.input1 - args.input2) * 1000;
+              setTimeout(() => {
+                resolve();
+              }, timeInMilliseconds);
+            });
+          case 'times':
+            return new Promise((resolve, reject) => {
+              const timeInMilliseconds = (args.input1 * args.input2) * 1000;
+              setTimeout(() => {
+                resolve();
+              }, timeInMilliseconds);
+            });
+          case 'divided by':
+            return new Promise((resolve, reject) => {
+              const timeInMilliseconds = (args.input1 / args.input2) * 1000;
+              setTimeout(() => {
+                resolve();
+              }, timeInMilliseconds);
+            });
+          case 'to the power of':
+            return new Promise((resolve, reject) => {
+              const timeInMilliseconds = (args.input1 ** args.input2) * 1000;
+              setTimeout(() => {
+                resolve();
+              }, timeInMilliseconds);
+            });
+          default:
+            return new Promise((resolve, reject) => {
+              const timeInMilliseconds = (args.input1 * 1000);
+              setTimeout(() => {
+                resolve();
+              }, timeInMilliseconds);
+            });
+        }
       }
   }
 
