@@ -15,7 +15,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3.0.1
         with:
-          path: 'transfer_all_files_here'      # upload generated folder
+          path: 'transfer_all_files_here/'      # upload generated folder
   
   deploy:
     needs: pages-directory-listing
